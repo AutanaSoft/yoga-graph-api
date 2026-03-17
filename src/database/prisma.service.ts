@@ -1,8 +1,9 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-import { env } from '../config/env';
+import appConfig from '../config/app.config';
+import prismaConfig from '../config/prisma.config';
 import { PrismaClient } from './prisma/generated/client';
 
-const connectionString = env.DATABASE_URL;
+const connectionString = prismaConfig.DATABASE_URL;
 
 const adapter = new PrismaPg({ connectionString });
 
@@ -14,9 +15,9 @@ export const prisma: PrismaClient =
   prismaGlobal.prisma ||
   new PrismaClient({
     adapter,
-    log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    log: appConfig.APP_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   });
 
-if (env.NODE_ENV !== 'production') {
+if (appConfig.APP_ENV !== 'production') {
   prismaGlobal.prisma = prisma;
 }

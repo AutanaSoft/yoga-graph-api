@@ -5,15 +5,16 @@ import rateLimit from '@fastify/rate-limit';
 import fastifyStatic from '@fastify/static';
 import { join } from 'path';
 import { createYoga } from 'graphql-yoga';
-import { env } from './config/env';
+import AppConfig from './config/app.config';
 import { schema } from './schema';
 import { prisma } from './database/prisma.service';
+import appConfig from './config/app.config';
 
 export const buildServer = async (): Promise<FastifyInstance> => {
   const server = fastify({
     logger: {
       transport:
-        env.NODE_ENV === 'development'
+        AppConfig.APP_ENV === 'development'
           ? {
               target: 'pino-pretty',
               options: { colorize: true },
@@ -28,7 +29,7 @@ export const buildServer = async (): Promise<FastifyInstance> => {
   });
 
   await server.register(helmet, {
-    contentSecurityPolicy: env.NODE_ENV === 'production' ? true : false,
+    contentSecurityPolicy: appConfig.APP_ENV === 'production' ? true : false,
   });
 
   await server.register(rateLimit, {
