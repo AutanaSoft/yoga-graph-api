@@ -7,7 +7,7 @@ import { join } from 'path';
 import { createYoga } from 'graphql-yoga';
 import { env } from './config/env';
 import { schema } from './schema';
-import { prisma } from './config/prisma';
+import { prisma } from './database/prisma.service';
 
 export const buildServer = async (): Promise<FastifyInstance> => {
   const server = fastify({
