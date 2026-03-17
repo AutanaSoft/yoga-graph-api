@@ -17,7 +17,14 @@ export const fastifyLoggerOptions: PinoLoggerOptions | boolean = {
     appConfig.APP_ENV === 'development'
       ? {
           target: 'pino-pretty',
-          options: { colorize: true },
+          options: {
+            colorize: true,
+            singleLine: true,
+            levelFirst: false,
+            translateTime: 'SYS:HH:MM:ss',
+            ignore: 'hostname,pid',
+            messageFormat: '[{context}] {msg}',
+          },
         }
       : undefined,
 };

@@ -6,6 +6,14 @@ import { corsConfig } from '@/config/cors.config';
 import { helmetConfig } from '@/config/helmet.config';
 import { rateLimitConfig } from '@/config/rate-limit.config';
 
+/**
+ * A bundled Fastify plugin that registers essential security-focused middleware.
+ *
+ * Includes:
+ * - CORS (Cross-Origin Resource Sharing)
+ * - Helmet (Security headers)
+ * - Rate Limiting (Protects against DDoS and brute force attacks)
+ */
 export const securityPlugins = fp(async (server) => {
   await server.register(cors, corsConfig);
   await server.register(helmet, helmetConfig);

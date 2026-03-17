@@ -12,7 +12,7 @@ import { validateEnv } from './env-validator';
  */
 const envSchema = z.object({
   CORS_ORIGIN: z.string().default('*'),
-  CORS_METHODS: z.array(z.string()).default(['POST', 'OPTIONS']),
+  CORS_METHODS: z.array(z.string()).default(['GET', 'POST', 'OPTIONS']),
   CORS_ALLOWED_HEADERS: z.array(z.string()).default(['*']),
   CORS_EXPOSED_HEADERS: z.array(z.string()).default(['*']),
   CORS_MAX_AGE: z.coerce.number().default(60 * 60 * 24),
