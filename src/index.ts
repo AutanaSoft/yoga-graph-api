@@ -1,5 +1,5 @@
 import { buildServer } from './server';
-import appConfig from './config/app.config';
+import appConfig from '@/config/app.config';
 
 const start = async () => {
   try {

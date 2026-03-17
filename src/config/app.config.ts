@@ -12,6 +12,7 @@ import { validateEnv } from './env-validator';
 const envSchema = z.object({
   APP_ENV: z.enum(['development', 'production']).default('development'),
   APP_PORT: z.coerce.number().default(4000),
+  APP_LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
 });
 
 /**
