@@ -4,7 +4,7 @@ import { schema } from '@/schema';
 import { createContext } from '@/core/plugins/graphql/context';
 import { corsConfig } from '@/config/cors.config';
 
-export const graphqlPlugin = fp(async (server) => {
+export const graphqlPlugin = fp((server) => {
   const yoga = createYoga({
     schema: schema,
     graphqlEndpoint: '/graphql',
