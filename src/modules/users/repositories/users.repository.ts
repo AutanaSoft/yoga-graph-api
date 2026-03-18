@@ -2,11 +2,11 @@ import { prisma } from '@/database/prisma.service';
 import { Prisma } from '@/database/prisma/generated/client';
 
 export class UsersRepository {
-  static async findAll(emailContains?: string, nameContains?: string) {
+  static async findAll(emailContains?: string, userNameContains?: string) {
     return prisma.user.findMany({
       where: {
         ...(emailContains && { email: { contains: emailContains, mode: 'insensitive' } }),
-        ...(nameContains && { name: { contains: nameContains, mode: 'insensitive' } }),
+        ...(userNameContains && { userName: { contains: userNameContains, mode: 'insensitive' } }),
       },
     });
   }

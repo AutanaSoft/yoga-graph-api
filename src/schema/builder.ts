@@ -4,6 +4,7 @@ import ValidationPlugin from '@pothos/plugin-validation';
 import type PrismaTypes from '@/database/prisma/generated/pothos';
 import { getDatamodel } from '@/database/prisma/generated/pothos';
 import { prisma } from '@/database/prisma.service';
+import { UserStatus } from '@/database/prisma/generated/client';
 
 export const builder = new SchemaBuilder<{
   PrismaTypes: PrismaTypes;
@@ -23,6 +24,10 @@ export const builder = new SchemaBuilder<{
     client: prisma,
     dmmf: getDatamodel(),
   },
+});
+
+export const UserStatusEnum = builder.enumType(UserStatus, {
+  name: 'UserStatus',
 });
 
 builder.scalarType('DateTime', {

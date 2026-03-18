@@ -1,23 +1,37 @@
-# Investigación: Generación Óptima de Schemas en GraphQL Yoga
+**Contexto del Sistema:**
+Estamos trabajando en el módulo `users` de nuestra aplicación. Nuestra API GraphQL está construida utilizando GraphQL Yoga, Pothos (con Prisma Plugin) y Zod para la validación (a través del plugin de validación de Pothos).
 
-Actúa como un Arquitecto de Software Experto en Node.js, TypeScript y GraphQL. Actualmente estoy utilizando `graphql-yoga` en mi proyecto y necesito determinar la estrategia más robusta, escalable y segura (type-safe) para construir y mantener los Schemas de GraphQL.
+Actualmente, el módulo usa una estructura de "Feature Modules", pero necesitamos refactorizarlo porque los reducidos archivos de entrada se están sobrecargando mezclando responsabilidades.
 
-Por favor, realiza una investigación exhaustiva apoyándote en la documentación oficial de `graphql-yoga` y las mejores prácticas de la comunidad (The Guild), enfocada en los siguientes puntos:
+**Problemas actuales:**
 
-1. **Estrategia para el Schema (Schema-first vs Code-first):**
-   - Determina cuál es la recomendación actual oficial para estructurar y construir schemas de GraphQL en Yoga dentro de un ecosistema fuertemente tipado con TypeScript.
-   - Analiza los pros y contras de cada enfoque de cara a la mantenibilidad y experiencia de desarrollo.
+1. Redundancia de Inputs: Los esquemas de Zod (DTOs) y las definiciones `builder.inputType` / abstract arg types de Pothos coexisten en el mismo lugar que los resolvers.
+2. Salidas: Nuestras salidas dependen de Entidades generadas vía Pothos-Prisma (`builder.prismaObject`), lo cual es correcto pero el propósito de las carpetas puede llegar a ser confuso.
+3. Bloques monolíticos: `users.resolver.ts` concentra la importación, declaración de inputs, argumentos en línea, Queries, y Mutations.
 
-2. **Uso de archivos `.graphql` y codegen (`@graphql-codegen/cli`):**
-   - Evalúa la factibilidad y conveniencia de utilizar estrictamente archivos `.graphql` para definir el esquema.
-   - Investiga cómo se integra eficientemente la herramienta `@graphql-codegen/cli` (GraphQL Code Generator) en este flujo para autogenerar los tipos de TypeScript correspondientes a los resolvers.
+**Instrucciones para el Agente:**
+Por favor, analiza la actual estructura del módulo `users` y refactorízala siguiendo estrictamente las siguientes directrices arquitectónicas:
 
-3. **Comparativa con otras herramientas Code-first:**
-   - Menciona brevemente si existen alternativas modernas recomendadas (por ejemplo, Pothos, Nexus u otras opciones populares dentro del ecosistema de The Guild).
+1. **Reestructuración de los Resolvers:**
+   - Elimina el archivo monolítico `users.resolver.ts`.
+   - Crea una subcarpeta `resolvers/` y divide el código en archivos separados por operaciones: `queries.resolver.ts` y `mutations.resolver.ts` (si hubiese suscripciones, irían en `subscriptions.resolver.ts`).
 
-**Entregables Esperados:**
-Al finalizar tu investigación, debes entregar:
+2. **Aislamiento de Inputs y Argumentos (Pothos + Zod):**
+   - Crea una carpeta `inputs/` o `args/`. Mueve aquí todas las declaraciones de entrada, por ejemplo, los `builder.inputType` (como `CreateUserInput` o `UpdateUserInput`) junto con sus validaciones Zod asociadas.
+   - El objetivo es que los archivos dentro de `resolvers/` queden limpios y sólo importen estos "Input Types" ya creados y validados. No deben existir objetos puros de Zod (`z.object`) definidos "inline" dentro del resolver para consultas.
 
-1. Una **evaluación técnica** de las opciones viables.
-2. Una **recomendación arquitectónica final** bien justificada, indicando cuál es la forma óptima de generar los schemas y los tipos para mi proyecto.
-3. Si recomiendas usar `@graphql-codegen/cli` junto a archivos `.graphql`, proporciona los pasos de alto nivel o la configuración necesaria para su implementación óptima.
+3. **Manejo de Outputs (Entities):**
+   - Conserva los resultados generados desde Prisma a través de Pothos en la carpeta `entities/` (como `user.entity.ts`). Estos archivos fungen oficialmente como nuestro contrato de salida hacia GraphQL. Mantén su separación limpia de la lógica.
+
+4. **Preservar el Core de Negocio:**
+   - No debes modificar la lógica interna de `users.service.ts` ni de `users.repository.ts`. Tu trabajo es exclusivamente en la capa de transporte/exposición GraphQL.
+   - Los nuevos resolvers separados deben consumir los métodos del service igual a como se realizaba antes.
+
+5. **Integración:**
+   - Asegúrate de tener o actualizar un `index.ts` principal en la raíz de `modules/users/` que se encargue de importar los nuevos resolvers (queries y mutations) así como las entities, para que el `schema/builder` de Pothos siga registrándolos sin problemas.
+
+**Criterios de Éxito:**
+
+- El código final debe compilar sin errores de TypeScript (`pnpm exec tsc --noEmit`).
+- La configuración del `builder` de Pothos no debe romperse.
+- El archivo `users.resolver.ts` original debe ser eliminado y reemplazado por la nueva estructura modularizada.
