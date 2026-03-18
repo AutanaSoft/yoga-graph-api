@@ -7,8 +7,8 @@ Purpose
 
 1. Agent language rules
 
-- Always respond in Spanish when communicating with the user.
-- Always present implementation plans, walkthroughs and .md files in Spanish.
+- User-facing communication: always respond in Spanish when communicating with the user (messages, explanations, walkthroughs, and interactive prompts).
+- Code-generation and technical artifacts: all generated source code, in-code documentation (JSDoc/TSDoc), code comments, commit messages related to code changes, and developer-facing technical documentation MUST be written in English. This keeps the codebase and API surface consistent for international developers.
 - Use `pnpm` to manage project dependencies.
 - Do not run the `build` command unless the user explicitly requests it.
 
@@ -21,6 +21,7 @@ Purpose
 - Lint and auto-fix: `pnpm run lint` (runs `eslint --fix .`)
 - Format with Prettier: `pnpm run format` (runs `prettier --write "src/**/*.ts"`)
 - Type‑check only: `pnpm exec tsc --noEmit` (run via `pnpm exec` to use local typescript)
+- Tests: there is no dedicated `test` script in `package.json`; do not invent test commands.
 
 3. Prisma / DB
 
@@ -37,7 +38,7 @@ Purpose
 5. Types, interfaces and DTOs
 
 - Prefer `type` for union/utility types and `interface` for object-shaped types used as API/DTO contracts.
-- DTO files use the `*.dto.ts` suffix in `src/modules/*/dto/` — follow that pattern for new modules.
+- This codebase currently uses GraphQL `inputs/` and `entities/` folders (for example `user-create.input.ts`, `user.entity.ts`) instead of `dto/`; follow existing local module patterns.
 - Keep runtime validation separate from types: use Zod for runtime validation where input must be validated (`src/config/env-validator.ts` shows a pattern).
 - Avoid `any`. If unavoidable, add a short TODO comment referencing reason and a follow-up task.
 
@@ -59,6 +60,9 @@ Purpose
 
 - GraphQL types and resolvers live under `src/modules/*` with a resolver and service/repository split.
 - Keep business logic in services (`*.service.ts`), persistence in repositories (`*.repository.ts`), and orchestrate in resolvers.
+- Split resolver entrypoints by concern (`*.queries.ts`, `*.mutations.ts`) under `resolvers/` when extending modules.
+- Prefer the `@/` path alias for source imports instead of deep relative paths.
+- Define Prisma-backed GraphQL entities with `builder.prismaObject` in `entities/`.
 - Use Pothos plugins consistently for Prisma integration (the repo has @pothos/plugin-prisma). Keep generated Pothos files under `src/database/prisma/generated` and do not hand-edit generated files.
 
 9. Pull requests & commits
