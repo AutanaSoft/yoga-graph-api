@@ -376,6 +376,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  UserProfile: 'UserProfile',
 } as const;
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -395,7 +396,7 @@ export type TypeMap<
     omit: GlobalOmitOptions;
   };
   meta: {
-    modelProps: 'user';
+    modelProps: 'user' | 'userProfile';
     txIsolationLevel: TransactionIsolationLevel;
   };
   model: {
@@ -473,6 +474,80 @@ export type TypeMap<
         };
       };
     };
+    UserProfile: {
+      payload: Prisma.$UserProfilePayload<ExtArgs>;
+      fields: Prisma.UserProfileFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.UserProfileFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.UserProfileFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+        };
+        findFirst: {
+          args: Prisma.UserProfileFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.UserProfileFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+        };
+        findMany: {
+          args: Prisma.UserProfileFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[];
+        };
+        create: {
+          args: Prisma.UserProfileCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+        };
+        createMany: {
+          args: Prisma.UserProfileCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.UserProfileCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[];
+        };
+        delete: {
+          args: Prisma.UserProfileDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+        };
+        update: {
+          args: Prisma.UserProfileUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+        };
+        deleteMany: {
+          args: Prisma.UserProfileDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.UserProfileUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.UserProfileUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[];
+        };
+        upsert: {
+          args: Prisma.UserProfileUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+        };
+        aggregate: {
+          args: Prisma.UserProfileAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserProfile>;
+        };
+        groupBy: {
+          args: Prisma.UserProfileGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.UserProfileGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.UserProfileCountArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.UserProfileCountAggregateOutputType> | number;
+        };
+      };
+    };
   };
 } & {
   other: {
@@ -514,13 +589,30 @@ export type TransactionIsolationLevel =
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  status: 'status',
+  roles: 'roles',
   email: 'email',
-  name: 'name',
+  userName: 'userName',
+  verifiedAt: 'verifiedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 } as const;
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
+
+export const UserProfileScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  phone: 'phone',
+  country: 'country',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+} as const;
+
+export type UserProfileScalarFieldEnum =
+  (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum];
 
 export const SortOrder = {
   asc: 'asc',
@@ -556,6 +648,22 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'String[]'
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>;
+
+/**
+ * Reference to a field of type 'UserStatus'
+ */
+export type EnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  'UserStatus'
+>;
+
+/**
+ * Reference to a field of type 'UserStatus[]'
+ */
+export type ListEnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  'UserStatus[]'
+>;
 
 /**
  * Reference to a field of type 'DateTime'
@@ -681,6 +789,7 @@ export type PrismaClientOptions = (
 };
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit;
+  userProfile?: Prisma.UserProfileOmit;
 };
 
 /* Types for Logging */

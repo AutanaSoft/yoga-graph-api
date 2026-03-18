@@ -8,5 +8,11 @@
  * 🟢 You can import this file directly.
  */
 
-// This file is empty because there are no enums in the schema.
-export {};
+export const UserStatus = {
+  REGISTERED: 'REGISTERED',
+  ACTIVE: 'ACTIVE',
+  FROZEN: 'FROZEN',
+  DELETED: 'DELETED',
+} as const;
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
