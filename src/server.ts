@@ -1,78 +1,41 @@
+import { fastifyLoggerOptions } from '@/config/logger.config';
+import { correlationPlugin } from '@/core/plugins/fastify/correlation.plugin';
+import { securityPlugins } from '@/core/plugins/fastify/security.plugin';
+import { uploadPlugin } from '@/core/plugins/fastify/upload.plugin';
+import { graphqlPlugin } from '@/core/plugins/graphql/graphql.plugin';
 import fastify, { FastifyInstance } from 'fastify';
-import cors from '@fastify/cors';
-import helmet from '@fastify/helmet';
-import rateLimit from '@fastify/rate-limit';
-import fastifyStatic from '@fastify/static';
-import { join } from 'path';
-import { createYoga } from 'graphql-yoga';
-import { env } from './config/env';
-import { schema } from './schema';
-import { prisma } from './database/prisma.service';
+import crypto from 'node:crypto';
 
+/**
+ * Core factory function to build and configure the Fastify server instance.
+ *
+ * It initializes Fastify with the project's standard logger, configures native
+ * request correlation features, and sequentially registers all necessary plugins.
+ *
+ * @returns {Promise<FastifyInstance>} A promise that resolves to the configured Fastify server.
+ */
 export const buildServer = async (): Promise<FastifyInstance> => {
   const server = fastify({
-    logger: {
-      transport:
-        env.NODE_ENV === 'development'
-          ? {
-              target: 'pino-pretty',
-              options: { colorize: true },
-            }
-          : undefined,
-    },
+    logger: fastifyLoggerOptions,
+    // Tell Fastify to extract the Correlation ID from this incoming header if present
+    requestIdHeader: 'x-correlation-id',
+    // Fallback: Generate a secure UUID v4 if no correlation header was sent
+    genReqId: () => crypto.randomUUID(),
+    // Tell the Pino logger to attach this ID under the key 'correlationId' instead of 'reqId'
+    requestIdLogLabel: 'correlationId',
   });
 
-  // Security Plugins Setup
-  await server.register(cors, {
-    origin: '*', // Adjust for production environments
-  });
+  // 1. Core Fastify Plugins
+  // Registers our custom plugin to append the correlation ID in the response headers
+  await server.register(correlationPlugin);
+  // Registers security-related plugins (CORS, Rate Limiting, Helmet, CSRF)
+  await server.register(securityPlugins);
+  // Extends Fastify with GraphQL Yoga support and its routing
+  await server.register(uploadPlugin);
 
-  await server.register(helmet, {
-    contentSecurityPolicy: env.NODE_ENV === 'production' ? true : false,
-  });
-
-  await server.register(rateLimit, {
-    max: 100,
-    timeWindow: '1 minute',
-  });
-
-  await server.register(fastifyStatic, {
-    root: join(process.cwd(), 'uploads'),
-    prefix: '/uploads/',
-  });
-
-  // Configurar Fastify para ignorar la lectura del body en uploads y pasarlo a Yoga
-  server.addContentTypeParser('multipart/form-data', {}, (req, payload, done) => done(null));
-
-  // Setup GraphQL Yoga
-  const yoga = createYoga({
-    schema: schema,
-    graphqlEndpoint: '/graphql',
-    context: (initialContext) => ({
-      ...initialContext,
-      prisma,
-    }),
-  });
-
-  // Attach Yoga to Fastify wrapper
-  server.route({
-    url: yoga.graphqlEndpoint,
-    method: ['GET', 'POST', 'OPTIONS'],
-    handler: async (req, reply) => {
-      // Fastify reply requires Node.js standard response object proxying from Yoga
-      const response = await yoga.handleNodeRequestAndResponse(req, reply.raw, {});
-      response.headers.forEach((value, key) => {
-        reply.header(key, value);
-      });
-      reply.status(response.status);
-      return response.body; // or reply.send(response.body)
-    },
-  });
-
-  // Adding basic health check
-  server.get('/health', async () => {
-    return { status: 'ok' };
-  });
+  // 2. GraphQL Plugin
+  // Registers multipart/form-data support for Fastify
+  await server.register(graphqlPlugin);
 
   return server;
 };

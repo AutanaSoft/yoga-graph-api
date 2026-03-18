@@ -1,38 +1,38 @@
 ---
 name: commit-messenger
-description: Genera mensajes de commit que sigan "Conventional Commits" y las reglas de commitlint de este proyecto. Úsalo cuando el usuario solicite "generar", "hacer" o "crear un mensaje de commit".
+description: Generates commit messages following "Conventional Commits" and the project's commitlint rules. Use it when the user requests to "generate", "make", or "create a commit message".
 ---
 
 # Commit Messenger
 
-Esta skill automatiza la generación de mensajes de commit para Git, asegurando que sigan el estándar de "Conventional Commits" del proyecto.
+This skill automates the generation of Git commit messages, ensuring they follow the project's "Conventional Commits" standard.
 
-## Reglas Obligatorias
+## Mandatory Rules
 
-- El `scope` **debe ser obligatorio**. Debe describir el módulo, componente o paquete afectado (ej. `ui`, `api`, `auth`, `config`). Si no es claro, infiere uno conciso a partir de los archivos en `staged`.
-- La longitud total de la primera línea (header) **no debe exceder los 100 caracteres**.
-- Todas las líneas subsiguientes (body, footer) tampoco deben exceder los 100 caracteres por línea.
-- Sigue el formato: `tipo(scope): descripción`.
+- The `scope` **is mandatory**. It must describe the affected module, component, or package (e.g., `ui`, `api`, `auth`, `config`). If it's not clear, infer a concise one from the `staged` files.
+- The total length of the first line (header) **must not exceed 100 characters**.
+- All subsequent lines (body, footer) must also not exceed 100 characters per line.
+- Follow the format: `type(scope): description`.
 
-## Tipos Disponibles
+## Available Types
 
-- `feat`: Una nueva característica.
-- `fix`: Corrección de un error (bug).
-- `docs`: Cambios exclusivos en la documentación.
-- `style`: Cambios que no afectan el significado del código (espacios, formato, etc.).
-- `refactor`: Un cambio de código que ni corrige un error ni añade una característica.
-- `perf`: Un cambio de código que mejora el rendimiento.
-- `test`: Añadir pruebas faltantes o corregir pruebas existentes.
-- `build`: Cambios que afectan el sistema de construcción o dependencias externas.
-- `ci`: Cambios en nuestros archivos y scripts de configuración de CI/CD.
-- `chore`: Otros cambios que no modifican los archivos de origen (`src`) o pruebas.
-- `revert`: Revierte un commit anterior.
+- `feat`: A new feature.
+- `fix`: A bug fix.
+- `docs`: Documentation only changes.
+- `style`: Changes that do not affect the meaning of the code (white-space, formatting, etc.).
+- `refactor`: A code change that neither fixes a bug nor adds a feature.
+- `perf`: A code change that improves performance.
+- `test`: Adding missing tests or correcting existing tests.
+- `build`: Changes that affect the build system or external dependencies.
+- `ci`: Changes to our CI configuration files and scripts.
+- `chore`: Other changes that don't modify `src` or test files.
+- `revert`: Reverts a previous commit.
 
-## Flujo de Trabajo (Workflow)
+## Workflow
 
-1. Cuando se active la skill, ejecuta `git status` para ver los archivos modificados.
-2. Ejecuta `git diff` (y `git diff --staged` si aplica) para analizar exactamente qué líneas cambiaron. **Nunca adivines el contenido del commit**.
-3. Determina el `tipo` y `scope` más apropiados.
-4. Escribe una descripción clara y breve en inglés (a menos que se te pida lo contrario, por convención de programación).
-5. Si es necesario, proporciona un cuerpo (`body`) o pie (`footer`) para cambios importantes (breaking changes) o contexto detallado.
-6. El output final debe ser estrictamente el mensaje de commit sugerido. No ejecutes git commit por cuenta propia a no ser que el usuario te lo instruya explícitamente.
+1. When the skill is triggered, run `git status` to see the modified files.
+2. Run `git diff` (and `git diff --staged` if applicable) to analyze exactly what lines changed. **Never guess the content of the commit**.
+3. Determine the most appropriate `type` and `scope`.
+4. Write a clear and brief description in English (unless requested otherwise, per programming convention).
+5. If necessary, provide a `body` or `footer` for breaking changes or detailed context.
+6. The final output must be strictly the suggested commit message. Do not run `git commit` on your own unless the user explicitly instructs you to do so.

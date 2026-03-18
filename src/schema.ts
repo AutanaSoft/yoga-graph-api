@@ -1,14 +1,12 @@
-import { createSchema } from 'graphql-yoga';
-import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
-import { userTypeDefs } from './modules/user/user.schema';
-import { userResolvers } from './modules/user/user.resolvers';
-import { systemTypeDefs } from './modules/system/system.schema';
-import { systemResolvers } from './modules/system/system.resolvers';
+import { builder } from '@/schema/builder';
 
-const typeDefs = mergeTypeDefs([userTypeDefs, systemTypeDefs]);
-const resolvers = mergeResolvers([userResolvers, systemResolvers]);
+// Import all modules to populate the Pothos builder registry
+import '@/modules/users';
+import '@/modules/system/system.resolver';
+import '@/modules/health/health.resolver';
 
-export const schema = createSchema({
-  typeDefs,
-  resolvers,
-});
+/**
+ * The final, compiled executable GraphQL schema instance to be passed to the GraphQL Yoga execution engine.
+ * Built using Pothos Code-First approach.
+ */
+export const schema = builder.toSchema();

@@ -19,7 +19,7 @@ const config: runtime.GetPrismaClientConfig = {
   engineVersion: '280c870be64f457428992c43c1f6d557fab6e29e',
   activeProvider: 'postgresql',
   inlineSchema:
-    'model User {\n  id        String   @id @default(uuid())\n  email     String   @unique\n  name      String?\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\ngenerator client {\n  provider            = "prisma-client"\n  output              = "./generated"\n  moduleFormat        = "cjs"\n  importFileExtension = "js"\n  binaryTargets       = ["native", "rhel-openssl-3.0.x"]\n}\n\ndatasource db {\n  provider = "postgresql"\n}\n',
+    'model User {\n  id        String   @id @default(uuid())\n  email     String   @unique\n  name      String?\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\ngenerator client {\n  provider            = "prisma-client"\n  output              = "./generated"\n  moduleFormat        = "cjs"\n  importFileExtension = "js"\n  binaryTargets       = ["native", "rhel-openssl-3.0.x"]\n}\n\ngenerator pothos {\n  provider = "prisma-pothos-types"\n  output   = "./generated/pothos.ts"\n}\n\ndatasource db {\n  provider = "postgresql"\n}\n',
   runtimeDataModel: {
     models: {},
     enums: {},
