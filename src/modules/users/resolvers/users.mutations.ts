@@ -1,7 +1,8 @@
 import { prisma } from '@/database/prisma.service';
+import { Prisma } from '@/database/prisma/generated/client';
 import { builder } from '@/schema/builder';
 import '../entities/user.entity';
-import { CreateUserInput, UserUpdateInput, UserWhereInput } from '../inputs';
+import { CreateUserInput, UserUpdateInput, UserWhereUniqueInput } from '../inputs';
 
 builder.mutationFields((t) => ({
   createUser: t.prismaField({
@@ -22,14 +23,14 @@ builder.mutationFields((t) => ({
   updateUser: t.prismaField({
     type: 'User',
     args: {
-      where: t.arg({ type: UserWhereInput, required: true }),
+      where: t.arg({ type: UserWhereUniqueInput, required: true }),
       data: t.arg({ type: UserUpdateInput, required: true }),
     },
     resolve: async (query, parent, args) => {
       const { data, where } = args;
       return await prisma.user.update({
         ...query,
-        where: { ...where },
+        where: { ...where } as Prisma.UserWhereUniqueInput,
         data: { ...data },
       });
     },

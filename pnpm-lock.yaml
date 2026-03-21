@@ -28,12 +28,18 @@ importers:
       '@pothos/core':
         specifier: ^4.12.0
         version: 4.12.0(graphql@16.13.1)
+      '@pothos/plugin-complexity':
+        specifier: ^4.1.2
+        version: 4.1.2(@pothos/core@4.12.0(graphql@16.13.1))(graphql@16.13.1)
       '@pothos/plugin-prisma':
         specifier: ^4.14.2
         version: 4.14.2(@pothos/core@4.12.0(graphql@16.13.1))(@prisma/client@7.5.0(prisma@7.5.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(graphql@16.13.1)(typescript@5.9.3)
       '@pothos/plugin-prisma-utils':
         specifier: ^1.3.3
         version: 1.3.3(@pothos/core@4.12.0(graphql@16.13.1))(@pothos/plugin-prisma@4.14.2(@pothos/core@4.12.0(graphql@16.13.1))(@prisma/client@7.5.0(prisma@7.5.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(graphql@16.13.1)(typescript@5.9.3))(@prisma/client@7.5.0(prisma@7.5.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(graphql@16.13.1)
+      '@pothos/plugin-scope-auth':
+        specifier: ^4.1.6
+        version: 4.1.6(@pothos/core@4.12.0(graphql@16.13.1))(graphql@16.13.1)
       '@pothos/plugin-validation':
         specifier: ^4.2.0
         version: 4.2.0(@pothos/core@4.12.0(graphql@16.13.1))(graphql@16.13.1)
@@ -877,6 +883,15 @@ packages:
     peerDependencies:
       graphql: ^16.10.0
 
+  '@pothos/plugin-complexity@4.1.2':
+    resolution:
+      {
+        integrity: sha512-0RUiYvhcR7bWlcnr49nK1rbT7nTlfjUaL+ISrDZ+aB5E5Te1iUbY1tcaukA/NRPV4vEd4Pwt+CmgIPvGml7gOA==,
+      }
+    peerDependencies:
+      '@pothos/core': '*'
+      graphql: ^16.10.0
+
   '@pothos/plugin-prisma-utils@1.3.3':
     resolution:
       {
@@ -899,6 +914,15 @@ packages:
       '@prisma/client': '*'
       graphql: ^16.10.0
       typescript: '>=4.7.2'
+
+  '@pothos/plugin-scope-auth@4.1.6':
+    resolution:
+      {
+        integrity: sha512-OuVrDiIf03VrExT3sgyt6YHYuFdUbJ6a6R9cHa01JWbnDUTEag8jFhtstZHou4tB8PkldtUgSspfkhJvFNk6bA==,
+      }
+    peerDependencies:
+      '@pothos/core': '*'
+      graphql: ^16.10.0
 
   '@pothos/plugin-validation@4.2.0':
     resolution:
@@ -3876,6 +3900,11 @@ snapshots:
     dependencies:
       graphql: 16.13.1
 
+  '@pothos/plugin-complexity@4.1.2(@pothos/core@4.12.0(graphql@16.13.1))(graphql@16.13.1)':
+    dependencies:
+      '@pothos/core': 4.12.0(graphql@16.13.1)
+      graphql: 16.13.1
+
   '@pothos/plugin-prisma-utils@1.3.3(@pothos/core@4.12.0(graphql@16.13.1))(@pothos/plugin-prisma@4.14.2(@pothos/core@4.12.0(graphql@16.13.1))(@prisma/client@7.5.0(prisma@7.5.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(graphql@16.13.1)(typescript@5.9.3))(@prisma/client@7.5.0(prisma@7.5.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(graphql@16.13.1)':
     dependencies:
       '@pothos/core': 4.12.0(graphql@16.13.1)
@@ -3891,6 +3920,11 @@ snapshots:
       '@prisma/generator-helper': 7.5.0
       graphql: 16.13.1
       typescript: 5.9.3
+
+  '@pothos/plugin-scope-auth@4.1.6(@pothos/core@4.12.0(graphql@16.13.1))(graphql@16.13.1)':
+    dependencies:
+      '@pothos/core': 4.12.0(graphql@16.13.1)
+      graphql: 16.13.1
 
   '@pothos/plugin-validation@4.2.0(@pothos/core@4.12.0(graphql@16.13.1))(graphql@16.13.1)':
     dependencies:

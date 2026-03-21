@@ -40,21 +40,33 @@ export const UserWhereInput = builder
       }),
   );
 
-export const UserWhereUniqueInput = builder.prismaWhereUnique('User', {
-  fields: {
-    id: true,
-    email: true,
-  },
-});
+export const UserWhereUniqueInput = builder
+  .prismaWhereUnique('User', {
+    fields: (t) => ({
+      id: t.string({ required: false }),
+      email: t.string({ required: false }),
+      userName: t.string({ required: false }),
+    }),
+  })
+  .validate(
+    z
+      .object({
+        id: z.uuid().optional(),
+        email: z.email().optional(),
+        userName: z.string().optional(),
+      })
+      .refine((args) => !!args.id || !!args.email || !!args.userName, {
+        message: 'Debes buscar al usuario ya sea por ID o por Correo',
+      }),
+  );
 
 export const UserUpdateInput = builder
   .prismaUpdate('User', {
     name: 'UserUpdateInput',
     fields: (t) => ({
-      id: t.id({ required: true }),
-      email: t.string({ required: true }),
-      userName: t.string({ required: true }),
-      password: t.string({ required: true }),
+      email: t.string({ required: false }),
+      userName: t.string({ required: false }),
+      password: t.string({ required: false }),
     }),
   })
   .validate(UpdateUserSchema);
