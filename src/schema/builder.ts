@@ -23,13 +23,14 @@
  * - Si prefieres validación estricta de `DateTime`, reemplaza la estrategia
  *   de fallback en `parseValue` por una comprobación que arroje un error.
  */
-import SchemaBuilder from '@pothos/core';
-import PrismaPlugin from '@pothos/plugin-prisma';
-import ValidationPlugin from '@pothos/plugin-validation';
-import type PrismaTypes from '@/database/prisma/generated/pothos';
-import { getDatamodel } from '@/database/prisma/generated/pothos';
 import { prisma } from '@/database/prisma.service';
 import { UserStatus } from '@/database/prisma/generated/client';
+import type PrismaTypes from '@/database/prisma/generated/pothos-prisma-types';
+import { getDatamodel } from '@/database/prisma/generated/pothos-prisma-types';
+import SchemaBuilder from '@pothos/core';
+import PrismaPlugin from '@pothos/plugin-prisma';
+import PrismaUtils from '@pothos/plugin-prisma-utils';
+import ValidationPlugin from '@pothos/plugin-validation';
 
 /**
  * Exporta una instancia única de `SchemaBuilder` tipada con los tipos
@@ -49,7 +50,7 @@ export const builder = new SchemaBuilder<{
     };
   };
 }>({
-  plugins: [PrismaPlugin, ValidationPlugin],
+  plugins: [PrismaPlugin, PrismaUtils, ValidationPlugin],
   prisma: {
     client: prisma,
     dmmf: getDatamodel(),

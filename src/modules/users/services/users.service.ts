@@ -1,5 +1,5 @@
-import { CreateUserType, UpdateUserType } from '../inputs';
 import { UsersRepository } from '../repositories';
+import { CreateUserType, UpdateUserType } from '../schemas';
 
 export class UsersService {
   static async getUsers(emailContains?: string, userNameContains?: string) {
@@ -16,14 +16,13 @@ export class UsersService {
 
   static async createUser(data: CreateUserType) {
     return UsersRepository.create({
-      email: data.email,
-      userName: data.userName,
+      ...data,
     });
   }
 
   static async updateUser(data: UpdateUserType) {
     return UsersRepository.update(data.id, {
-      userName: data.userName ?? undefined,
+      ...data.data,
     });
   }
 

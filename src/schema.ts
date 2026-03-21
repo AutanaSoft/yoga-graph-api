@@ -1,7 +1,7 @@
 import { builder } from '@/schema/builder';
 
 // Import all modules to populate the Pothos builder registry
-import '@/modules/users';
+import '@/modules/users/resolvers';
 import '@/modules/system/system.resolver';
 import '@/modules/health/health.resolver';
 
