@@ -58,6 +58,28 @@ export const builder = new SchemaBuilder<{
 });
 
 /**
+ * Filtros de ejemplo para campos de tipo `String` y `DateTime`. Estos filtros
+ * se pueden usar en los resolvers para permitir consultas más flexibles (ej.
+ * buscar usuarios por email que contenga cierta cadena o por fecha de creación
+ * mayor a una fecha dada). Personaliza los operadores disponibles según las
+ * necesidades de tu aplicación.
+ */
+export const UuidFilterInput = builder.prismaFilter('String', {
+  name: 'UuidFilter',
+  ops: ['equals', 'in', 'notIn'],
+});
+
+export const StringFilterInput = builder.prismaFilter('String', {
+  name: 'StringFilter',
+  ops: ['equals', 'in', 'notIn', 'contains', 'startsWith', 'endsWith', 'mode'],
+});
+
+export const DateTimeFilterInput = builder.prismaFilter('DateTime', {
+  name: 'DateTimeFilter',
+  ops: ['equals', 'in', 'notIn', 'lt', 'lte', 'gt', 'gte'],
+});
+
+/**
  * Mapea el enum de Prisma `UserStatus` a un enum GraphQL llamado `UserStatus`.
  * Usar este enum en los tipos/inputs garantiza que los valores sean consistentes
  * con el modelo de datos en la base de datos.
@@ -89,3 +111,4 @@ builder.scalarType('DateTime', {
 // Tipos raíz vacíos: se extienden en los módulos/resolvers del proyecto.
 builder.queryType({});
 builder.mutationType({});
+builder.subscriptionType({});

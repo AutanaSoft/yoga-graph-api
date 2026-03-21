@@ -35,7 +35,6 @@ export const systemResolvers = builder.mutationFields((t) => ({
   }),
 }));
 
-builder.subscriptionType({});
 builder.subscriptionFields((t) => ({
   serverTime: t.string({
     subscribe: async function* () {

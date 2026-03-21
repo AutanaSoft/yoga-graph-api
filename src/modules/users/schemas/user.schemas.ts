@@ -79,9 +79,6 @@ export const CreateUserSchema = UserEntitySchema.omit({
     }),
 });
 
-/**
- * Type definition for creating a new User, inferred from CreateUserSchema.
- */
 export type CreateUserType = z.infer<typeof CreateUserSchema>;
 
 /**
