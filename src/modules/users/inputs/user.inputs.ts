@@ -1,6 +1,6 @@
 import { builder, StringFilterInput, UuidFilterInput } from '@/schema/builder';
 import z from 'zod';
-import { CreateUserSchema } from '../schemas';
+import { CreateUserSchema, UpdateUserSchema } from '../schemas';
 
 export const CreateUserInput = builder
   .prismaCreate('User', {
@@ -14,9 +14,6 @@ export const CreateUserInput = builder
   })
   .validate(CreateUserSchema);
 
-/*
- * Input `UserWhereInput` para filtrar usuarios en consultas. Este input se puede usar en resolvers para permitir búsquedas flexibles (ej. buscar usuarios por email que contenga cierta cadena o por ID específico). Personaliza los campos y operadores disponibles según las necesidades de tu aplicación.
- */
 export const UserWhereInput = builder
   .prismaWhere('User', {
     fields: {
@@ -42,3 +39,22 @@ export const UserWhereInput = builder
         message: 'Debes buscar al usuario ya sea por ID o por Correo',
       }),
   );
+
+export const UserWhereUniqueInput = builder.prismaWhereUnique('User', {
+  fields: {
+    id: true,
+    email: true,
+  },
+});
+
+export const UserUpdateInput = builder
+  .prismaUpdate('User', {
+    name: 'UserUpdateInput',
+    fields: (t) => ({
+      id: t.id({ required: true }),
+      email: t.string({ required: true }),
+      userName: t.string({ required: true }),
+      password: t.string({ required: true }),
+    }),
+  })
+  .validate(UpdateUserSchema);
