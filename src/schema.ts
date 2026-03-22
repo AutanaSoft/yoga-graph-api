@@ -1,4 +1,4 @@
-import { builder } from '@/schema/builder';
+import { builder } from '@/core/lib/pothos-builder';
 
 // Import all modules to populate the Pothos builder registry
 import '@/modules/users/resolvers';

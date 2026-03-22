@@ -1,38 +1,16 @@
 import { z } from 'zod';
 
-/**
- * Zod enumeration for user lifecycle states.
- * - REGISTERED: Initial state after sign-up.
- * - ACTIVE: Account verified and active.
- * - FROZEN: Temporarily suspended.
- * - DELETED: Account logically removed.
- */
-export const UserStatusEnum = z.enum(['REGISTERED', 'ACTIVE', 'FROZEN', 'DELETED'], {
-  error: () => ({ message: 'Invalid user status' }),
-});
+export const UserStatusEnum = z.enum(
+  ['REGISTERED', 'ACTIVE', 'FROZEN', 'DELETED'],
+  'Invalid user status',
+);
 
-/**
- * Type definition for user status, inferred from UserStatusEnum.
- */
 export type UserStatusType = z.infer<typeof UserStatusEnum>;
 
-/**
- * Zod enumeration for user authorization roles.
- * Defines the access levels within the application.
- */
-export const UserRolesEnum = z.enum(['USER', 'ADMIN'], {
-  error: () => ({ message: 'Invalid user role' }),
-});
+export const UserRolesEnum = z.enum(['USER', 'ADMIN'], 'Invalid user role');
 
-/**
- * Type definition for user roles, inferred from UserRolesEnum.
- */
 export type UserRolesType = z.infer<typeof UserRolesEnum>;
 
-/**
- * Zod schema for the User entity.
- * Models the complete structure of a user as persisted in the database.
- */
 export const UserEntitySchema = z.object({
   id: z.uuid('Invalid user ID'),
   status: UserStatusEnum,
@@ -45,16 +23,8 @@ export const UserEntitySchema = z.object({
   updatedAt: z.iso.datetime('Update date must be a valid datetime'),
 });
 
-/**
- * Type definition for a User entity, inferred from UserEntitySchema.
- */
 export type UserEntityType = z.infer<typeof UserEntitySchema>;
 
-/**
- * Zod schema for creating a new User account.
- * Omits auto-generated or system-managed fields and includes specific validation
- * for username and password complexity.
- */
 export const CreateUserSchema = UserEntitySchema.omit({
   id: true,
   status: true,
@@ -81,22 +51,40 @@ export const CreateUserSchema = UserEntitySchema.omit({
 
 export type CreateUserType = z.infer<typeof CreateUserSchema>;
 
-/**
- * Zod schema for updating an existing User account.
- * Makes fields optional and allows updating the user status.
- */
 export const UpdateUserSchema = z.object({
   id: z.uuid('Invalid user ID'),
   data: CreateUserSchema.partial()
     .omit({
-      password: true, // Password updates should be handled separately with proper validation
+      password: true,
     })
     .extend({
       status: UserStatusEnum.optional(),
     }),
 });
 
-/**
- * Type definition for updating a User, inferred from UpdateUserSchema.
- */
 export type UpdateUserType = z.infer<typeof UpdateUserSchema>;
+
+export const UserWhereUniqueInputSchema = z
+  .object({
+    id: z.uuid('Invalid user ID').optional(),
+    email: z.email('Invalid email format').optional(),
+    userName: z.string('Username must be a string').optional(),
+  })
+  .refine((args) => !!args.id || !!args.email || !!args.userName, {
+    message: 'You must provide an ID, email, or username to search for the user',
+  });
+
+export type UserWhereUniqueInputType = z.infer<typeof UserWhereUniqueInputSchema>;
+
+export const UserWhereInputSchema = z.object({
+  id: z.union([z.uuid(), z.object({ equals: z.uuid() })]).optional(),
+  email: z.email('Invalid email format').optional(),
+  userName: z.string('Username must be a string').optional(),
+  status: UserStatusEnum.optional(),
+  roles: z.array(UserRolesEnum).optional(),
+  verifiedAt: z.iso.datetime('Verification date must be a valid datetime').nullable().optional(),
+  createdAt: z.iso.datetime('Creation date must be a valid datetime').optional(),
+  updatedAt: z.iso.datetime('Update date must be a valid datetime').optional(),
+});
+
+export type UserWhereInputType = z.infer<typeof UserWhereInputSchema>;

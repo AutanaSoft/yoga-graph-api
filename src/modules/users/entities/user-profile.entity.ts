@@ -1,4 +1,4 @@
-import { builder } from '@/schema/builder';
+import { builder } from '@/core/lib/pothos-builder';
 
 export const UserProfileEntity = builder.prismaObject('UserProfile', {
   name: 'UserProfile',
@@ -9,7 +9,6 @@ export const UserProfileEntity = builder.prismaObject('UserProfile', {
     phone: t.exposeString('phone', { nullable: true }),
     country: t.exposeString('country', { nullable: true }),
     userId: t.exposeString('userId'),
-    user: t.relation('user'),
     createdAt: t.expose('createdAt', { type: 'DateTime' }),
     updatedAt: t.expose('updatedAt', { type: 'DateTime' }),
   }),

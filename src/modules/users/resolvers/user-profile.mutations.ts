@@ -1,6 +1,6 @@
 import { prisma } from '@/database/prisma.service';
 import { Prisma } from '@/database/prisma/generated/client';
-import { builder } from '@/schema/builder';
+import { builder } from '@/core/lib/pothos-builder';
 import '../entities/user-profile.entity';
 import {
   CreateUserProfileInput,

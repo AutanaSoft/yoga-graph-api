@@ -1,4 +1,4 @@
-import { builder } from '@/schema/builder';
+import { builder } from '@/core/lib/pothos-builder';
 
 const HealthStatus = builder
   .objectRef<{ status: string; timestamp: string }>('HealthStatus')

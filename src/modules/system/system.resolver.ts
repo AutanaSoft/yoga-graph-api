@@ -1,4 +1,4 @@
-import { builder } from '@/schema/builder';
+import { builder } from '@/core/lib/pothos-builder';
 import { join } from 'path';
 import * as fs from 'fs-extra';
 

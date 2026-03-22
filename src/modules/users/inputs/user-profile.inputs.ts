@@ -1,4 +1,4 @@
-import { builder, UuidFilterInput } from '@/schema/builder';
+import { builder, UuidFilterInput } from '@/core/lib/pothos-builder';
 import { z } from 'zod';
 import { CreateUserProfileSchema, UpdateUserProfileSchema } from '../schemas';
 
@@ -16,9 +16,9 @@ export const CreateUserProfileInput = builder
 
 export const UserProfileWhereUniqueInput = builder
   .prismaWhereUnique('UserProfile', {
-    fields: (t) => ({
-      id: t.string({ required: false }),
-      userId: t.string({ required: false }),
+    fields: () => ({
+      id: 'String',
+      userId: 'String',
     }),
   })
   .validate(
@@ -35,11 +35,11 @@ export const UserProfileWhereUniqueInput = builder
 export const UserProfileUpdateInput = builder
   .prismaUpdate('UserProfile', {
     name: 'UserProfileUpdateInput',
-    fields: (t) => ({
-      firstName: t.string({ required: false }),
-      lastName: t.string({ required: false }),
-      phone: t.string({ required: false }),
-      country: t.string({ required: false }),
+    fields: () => ({
+      firstName: 'String',
+      lastName: 'String',
+      phone: 'String',
+      country: 'String',
     }),
   })
   .validate(UpdateUserProfileSchema);

@@ -12,7 +12,7 @@ model User {
   status     UserStatus @default(REGISTERED)
   roles      String[]   @default(["USER"])
   email      String     @unique
-  userName   String?    @unique @map("user_name")
+  userName   String     @unique @map("user_name")
   password   String
   verifiedAt DateTime?  @map("verified_at") @db.Timestamptz()
   createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz()

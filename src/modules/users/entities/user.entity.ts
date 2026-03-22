@@ -1,4 +1,4 @@
-import { builder, UserStatusEnum } from '@/schema/builder';
+import { builder, UserStatusEnum } from '@/core/lib/pothos-builder';
 
 export const UserEntity = builder.prismaObject('User', {
   name: 'User',

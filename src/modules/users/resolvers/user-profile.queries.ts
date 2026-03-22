@@ -1,5 +1,6 @@
 import { prisma } from '@/database/prisma.service';
-import { builder } from '@/schema/builder';
+import { Prisma } from '@/database/prisma/generated/client';
+import { builder } from '@/core/lib/pothos-builder';
 import '../entities/user-profile.entity';
 import { UserProfileWhereInput, UserProfileWhereUniqueInput } from '../inputs';
 
@@ -16,7 +17,7 @@ builder.queryFields((t) => ({
 
       return await prisma.userProfile.findUnique({
         ...query,
-        where: { ...args.where },
+        where: args.where as Prisma.UserProfileWhereUniqueInput,
       });
     },
   }),

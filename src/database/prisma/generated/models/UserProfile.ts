@@ -441,6 +441,10 @@ export type UserProfileUncheckedUpdateOneWithoutUserNestedInput = {
   >;
 };
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null;
+};
+
 export type UserProfileCreateWithoutUserInput = {
   id?: string;
   firstName: string;
