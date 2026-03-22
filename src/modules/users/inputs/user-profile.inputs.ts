@@ -15,7 +15,7 @@ export const CreateUserProfileInput = builder
   .validate(CreateUserProfileSchema);
 
 export const UserProfileWhereUniqueInput = builder
-  .prismaWhereUnique('UserProfile', {
+  .prismaWhereUnique('ProfileModel', {
     fields: () => ({
       id: 'String',
       userId: 'String',
@@ -33,7 +33,7 @@ export const UserProfileWhereUniqueInput = builder
   );
 
 export const UserProfileUpdateInput = builder
-  .prismaUpdate('UserProfile', {
+  .prismaUpdate('ProfileModel', {
     name: 'UserProfileUpdateInput',
     fields: () => ({
       firstName: 'String',
@@ -44,7 +44,7 @@ export const UserProfileUpdateInput = builder
   })
   .validate(UpdateUserProfileSchema);
 
-export const UserProfileWhereInput = builder.prismaWhere('UserProfile', {
+export const UserProfileWhereInput = builder.prismaWhere('ProfileModel', {
   fields: {
     id: UuidFilterInput,
     userId: UuidFilterInput,

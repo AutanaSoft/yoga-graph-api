@@ -7,6 +7,6 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/User.js';
-export type * from './models/UserProfile.js';
+export type * from './models/UserModel.js';
+export type * from './models/ProfileModel.js';
 export type * from './commonInputTypes.js';

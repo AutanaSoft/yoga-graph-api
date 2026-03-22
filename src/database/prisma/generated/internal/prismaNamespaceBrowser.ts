@@ -48,8 +48,8 @@ export const JsonNull = runtime.JsonNull;
 export const AnyNull = runtime.AnyNull;
 
 export const ModelName = {
-  User: 'User',
-  UserProfile: 'UserProfile',
+  UserModel: 'UserModel',
+  ProfileModel: 'ProfileModel',
 } as const;
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -68,7 +68,7 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel =
   (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
 
-export const UserScalarFieldEnum = {
+export const UserModelScalarFieldEnum = {
   id: 'id',
   status: 'status',
   roles: 'roles',
@@ -80,9 +80,10 @@ export const UserScalarFieldEnum = {
   updatedAt: 'updatedAt',
 } as const;
 
-export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
+export type UserModelScalarFieldEnum =
+  (typeof UserModelScalarFieldEnum)[keyof typeof UserModelScalarFieldEnum];
 
-export const UserProfileScalarFieldEnum = {
+export const ProfileModelScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
   lastName: 'lastName',
@@ -93,8 +94,8 @@ export const UserProfileScalarFieldEnum = {
   userId: 'userId',
 } as const;
 
-export type UserProfileScalarFieldEnum =
-  (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum];
+export type ProfileModelScalarFieldEnum =
+  (typeof ProfileModelScalarFieldEnum)[keyof typeof ProfileModelScalarFieldEnum];
 
 export const SortOrder = {
   asc: 'asc',

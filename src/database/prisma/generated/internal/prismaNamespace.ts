@@ -375,8 +375,8 @@ export type FieldRef<Model, FieldType> = runtime.FieldRef<Model, FieldType>;
 type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRef<Model, FieldType>;
 
 export const ModelName = {
-  User: 'User',
-  UserProfile: 'UserProfile',
+  UserModel: 'UserModel',
+  ProfileModel: 'ProfileModel',
 } as const;
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -396,155 +396,157 @@ export type TypeMap<
     omit: GlobalOmitOptions;
   };
   meta: {
-    modelProps: 'user' | 'userProfile';
+    modelProps: 'userModel' | 'profileModel';
     txIsolationLevel: TransactionIsolationLevel;
   };
   model: {
-    User: {
-      payload: Prisma.$UserPayload<ExtArgs>;
-      fields: Prisma.UserFieldRefs;
+    UserModel: {
+      payload: Prisma.$UserModelPayload<ExtArgs>;
+      fields: Prisma.UserModelFieldRefs;
       operations: {
         findUnique: {
-          args: Prisma.UserFindUniqueArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload> | null;
+          args: Prisma.UserModelFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload> | null;
         };
         findUniqueOrThrow: {
-          args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>;
+          args: Prisma.UserModelFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload>;
         };
         findFirst: {
-          args: Prisma.UserFindFirstArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload> | null;
+          args: Prisma.UserModelFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload> | null;
         };
         findFirstOrThrow: {
-          args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>;
+          args: Prisma.UserModelFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload>;
         };
         findMany: {
-          args: Prisma.UserFindManyArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>[];
+          args: Prisma.UserModelFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload>[];
         };
         create: {
-          args: Prisma.UserCreateArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>;
+          args: Prisma.UserModelCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload>;
         };
         createMany: {
-          args: Prisma.UserCreateManyArgs<ExtArgs>;
+          args: Prisma.UserModelCreateManyArgs<ExtArgs>;
           result: BatchPayload;
         };
         createManyAndReturn: {
-          args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>[];
+          args: Prisma.UserModelCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload>[];
         };
         delete: {
-          args: Prisma.UserDeleteArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>;
+          args: Prisma.UserModelDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload>;
         };
         update: {
-          args: Prisma.UserUpdateArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>;
+          args: Prisma.UserModelUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload>;
         };
         deleteMany: {
-          args: Prisma.UserDeleteManyArgs<ExtArgs>;
+          args: Prisma.UserModelDeleteManyArgs<ExtArgs>;
           result: BatchPayload;
         };
         updateMany: {
-          args: Prisma.UserUpdateManyArgs<ExtArgs>;
+          args: Prisma.UserModelUpdateManyArgs<ExtArgs>;
           result: BatchPayload;
         };
         updateManyAndReturn: {
-          args: Prisma.UserUpdateManyAndReturnArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>[];
+          args: Prisma.UserModelUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload>[];
         };
         upsert: {
-          args: Prisma.UserUpsertArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>;
+          args: Prisma.UserModelUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserModelPayload>;
         };
         aggregate: {
-          args: Prisma.UserAggregateArgs<ExtArgs>;
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUser>;
+          args: Prisma.UserModelAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserModel>;
         };
         groupBy: {
-          args: Prisma.UserGroupByArgs<ExtArgs>;
-          result: runtime.Types.Utils.Optional<Prisma.UserGroupByOutputType>[];
+          args: Prisma.UserModelGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.UserModelGroupByOutputType>[];
         };
         count: {
-          args: Prisma.UserCountArgs<ExtArgs>;
-          result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number;
+          args: Prisma.UserModelCountArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.UserModelCountAggregateOutputType> | number;
         };
       };
     };
-    UserProfile: {
-      payload: Prisma.$UserProfilePayload<ExtArgs>;
-      fields: Prisma.UserProfileFieldRefs;
+    ProfileModel: {
+      payload: Prisma.$ProfileModelPayload<ExtArgs>;
+      fields: Prisma.ProfileModelFieldRefs;
       operations: {
         findUnique: {
-          args: Prisma.UserProfileFindUniqueArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload> | null;
+          args: Prisma.ProfileModelFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload> | null;
         };
         findUniqueOrThrow: {
-          args: Prisma.UserProfileFindUniqueOrThrowArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+          args: Prisma.ProfileModelFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload>;
         };
         findFirst: {
-          args: Prisma.UserProfileFindFirstArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload> | null;
+          args: Prisma.ProfileModelFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload> | null;
         };
         findFirstOrThrow: {
-          args: Prisma.UserProfileFindFirstOrThrowArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+          args: Prisma.ProfileModelFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload>;
         };
         findMany: {
-          args: Prisma.UserProfileFindManyArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[];
+          args: Prisma.ProfileModelFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload>[];
         };
         create: {
-          args: Prisma.UserProfileCreateArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+          args: Prisma.ProfileModelCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload>;
         };
         createMany: {
-          args: Prisma.UserProfileCreateManyArgs<ExtArgs>;
+          args: Prisma.ProfileModelCreateManyArgs<ExtArgs>;
           result: BatchPayload;
         };
         createManyAndReturn: {
-          args: Prisma.UserProfileCreateManyAndReturnArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[];
+          args: Prisma.ProfileModelCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload>[];
         };
         delete: {
-          args: Prisma.UserProfileDeleteArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+          args: Prisma.ProfileModelDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload>;
         };
         update: {
-          args: Prisma.UserProfileUpdateArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+          args: Prisma.ProfileModelUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload>;
         };
         deleteMany: {
-          args: Prisma.UserProfileDeleteManyArgs<ExtArgs>;
+          args: Prisma.ProfileModelDeleteManyArgs<ExtArgs>;
           result: BatchPayload;
         };
         updateMany: {
-          args: Prisma.UserProfileUpdateManyArgs<ExtArgs>;
+          args: Prisma.ProfileModelUpdateManyArgs<ExtArgs>;
           result: BatchPayload;
         };
         updateManyAndReturn: {
-          args: Prisma.UserProfileUpdateManyAndReturnArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[];
+          args: Prisma.ProfileModelUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload>[];
         };
         upsert: {
-          args: Prisma.UserProfileUpsertArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>;
+          args: Prisma.ProfileModelUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfileModelPayload>;
         };
         aggregate: {
-          args: Prisma.UserProfileAggregateArgs<ExtArgs>;
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUserProfile>;
+          args: Prisma.ProfileModelAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProfileModel>;
         };
         groupBy: {
-          args: Prisma.UserProfileGroupByArgs<ExtArgs>;
-          result: runtime.Types.Utils.Optional<Prisma.UserProfileGroupByOutputType>[];
+          args: Prisma.ProfileModelGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.ProfileModelGroupByOutputType>[];
         };
         count: {
-          args: Prisma.UserProfileCountArgs<ExtArgs>;
-          result: runtime.Types.Utils.Optional<Prisma.UserProfileCountAggregateOutputType> | number;
+          args: Prisma.ProfileModelCountArgs<ExtArgs>;
+          result:
+            | runtime.Types.Utils.Optional<Prisma.ProfileModelCountAggregateOutputType>
+            | number;
         };
       };
     };
@@ -587,7 +589,7 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel =
   (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
 
-export const UserScalarFieldEnum = {
+export const UserModelScalarFieldEnum = {
   id: 'id',
   status: 'status',
   roles: 'roles',
@@ -599,9 +601,10 @@ export const UserScalarFieldEnum = {
   updatedAt: 'updatedAt',
 } as const;
 
-export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
+export type UserModelScalarFieldEnum =
+  (typeof UserModelScalarFieldEnum)[keyof typeof UserModelScalarFieldEnum];
 
-export const UserProfileScalarFieldEnum = {
+export const ProfileModelScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
   lastName: 'lastName',
@@ -612,8 +615,8 @@ export const UserProfileScalarFieldEnum = {
   userId: 'userId',
 } as const;
 
-export type UserProfileScalarFieldEnum =
-  (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum];
+export type ProfileModelScalarFieldEnum =
+  (typeof ProfileModelScalarFieldEnum)[keyof typeof ProfileModelScalarFieldEnum];
 
 export const SortOrder = {
   asc: 'asc',
@@ -789,8 +792,8 @@ export type PrismaClientOptions = (
   comments?: runtime.SqlCommenterPlugin[];
 };
 export type GlobalOmitConfig = {
-  user?: Prisma.UserOmit;
-  userProfile?: Prisma.UserProfileOmit;
+  userModel?: Prisma.UserModelOmit;
+  profileModel?: Prisma.ProfileModelOmit;
 };
 
 /* Types for Logging */

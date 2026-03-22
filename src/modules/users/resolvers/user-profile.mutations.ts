@@ -1,6 +1,6 @@
+import { builder } from '@/core/lib/pothos-builder';
 import { prisma } from '@/database/prisma.service';
 import { Prisma } from '@/database/prisma/generated/client';
-import { builder } from '@/core/lib/pothos-builder';
 import '../entities/user-profile.entity';
 import {
   CreateUserProfileInput,
@@ -10,13 +10,13 @@ import {
 
 builder.mutationFields((t) => ({
   createUserProfile: t.prismaField({
-    type: 'UserProfile',
+    type: 'ProfileModel',
     args: {
       data: t.arg({ type: CreateUserProfileInput, required: true }),
     },
     resolve: async (query, parent, args) => {
       const { data } = args;
-      return await prisma.userProfile.create({
+      return await prisma.profileModel.create({
         ...query,
         data: {
           firstName: data.firstName,
@@ -29,30 +29,30 @@ builder.mutationFields((t) => ({
     },
   }),
   updateUserProfile: t.prismaField({
-    type: 'UserProfile',
+    type: 'ProfileModel',
     args: {
       where: t.arg({ type: UserProfileWhereUniqueInput, required: true }),
       data: t.arg({ type: UserProfileUpdateInput, required: true }),
     },
     resolve: async (query, parent, args) => {
       const { data, where } = args;
-      return await prisma.userProfile.update({
+      return await prisma.profileModel.update({
         ...query,
-        where: { ...where } as Prisma.UserProfileWhereUniqueInput,
+        where: { ...where } as Prisma.ProfileModelWhereUniqueInput,
         data: { ...data },
       });
     },
   }),
   deleteUserProfile: t.prismaField({
-    type: 'UserProfile',
+    type: 'ProfileModel',
     args: {
       where: t.arg({ type: UserProfileWhereUniqueInput, required: true }),
     },
     resolve: async (query, parent, args) => {
       const { where } = args;
-      return await prisma.userProfile.delete({
+      return await prisma.profileModel.delete({
         ...query,
-        where: { ...where } as Prisma.UserProfileWhereUniqueInput,
+        where: { ...where } as Prisma.ProfileModelWhereUniqueInput,
       });
     },
   }),

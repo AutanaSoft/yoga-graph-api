@@ -3,8 +3,41 @@ import { EmailFilterSchema, StringFilterSchema, UuidFilterSchema } from '@/core/
 import z from 'zod';
 import { CreateUserSchema, UpdateUserSchema } from '../schemas';
 
+const USER_LOOKUP_REQUIRED_MESSAGE =
+  'At least one lookup field is required: id, email, or userName.';
+
+type UserLookupFields = {
+  id?: unknown;
+  email?: unknown;
+  userName?: unknown;
+};
+
+// Reusable predicate to enforce at least one lookup field in search inputs.
+const hasUserLookupField = ({ id, email, userName }: UserLookupFields): boolean =>
+  Boolean(id || email || userName);
+
+const UserWhereValidationSchema = z
+  .object({
+    id: UuidFilterSchema.optional(),
+    email: EmailFilterSchema.optional(),
+    userName: StringFilterSchema.optional(),
+  })
+  .refine(hasUserLookupField, {
+    message: USER_LOOKUP_REQUIRED_MESSAGE,
+  });
+
+const UserWhereUniqueValidationSchema = z
+  .object({
+    id: z.uuid().optional(),
+    email: z.email().optional(),
+    userName: z.string().optional(),
+  })
+  .refine(hasUserLookupField, {
+    message: USER_LOOKUP_REQUIRED_MESSAGE,
+  });
+
 export const CreateUserInput = builder
-  .prismaCreate('User', {
+  .prismaCreate('UserModel', {
     name: 'CreateUserInput',
     fields: () => ({
       roles: 'String',
@@ -16,7 +49,7 @@ export const CreateUserInput = builder
   .validate(CreateUserSchema);
 
 export const UserUpdateInput = builder
-  .prismaUpdate('User', {
+  .prismaUpdate('UserModel', {
     name: 'UserUpdateInput',
     fields: () => ({
       email: 'String',
@@ -27,41 +60,21 @@ export const UserUpdateInput = builder
   .validate(UpdateUserSchema);
 
 export const UserWhereInput = builder
-  .prismaWhere('User', {
+  .prismaWhere('UserModel', {
     fields: {
       id: UuidFilterInput,
       email: StringFilterInput,
       userName: StringFilterInput,
     },
   })
-  .validate(
-    z
-      .object({
-        id: UuidFilterSchema.optional(),
-        email: EmailFilterSchema.optional(),
-        userName: StringFilterSchema.optional(),
-      })
-      .refine((args) => !!args.id || !!args.email || !!args.userName, {
-        message: '',
-      }),
-  );
+  .validate(UserWhereValidationSchema);
 
 export const UserWhereUniqueInput = builder
-  .prismaWhereUnique('User', {
+  .prismaWhereUnique('UserModel', {
     fields: () => ({
       id: 'String',
       email: 'String',
       userName: 'String',
     }),
   })
-  .validate(
-    z
-      .object({
-        id: z.uuid().optional(),
-        email: z.email().optional(),
-        userName: z.string().optional(),
-      })
-      .refine((args) => !!args.id || !!args.email || !!args.userName, {
-        message: 'Debes buscar al usuario ya sea por ID o por Correo',
-      }),
-  );
+  .validate(UserWhereUniqueValidationSchema);

@@ -1,7 +1,6 @@
 import { builder } from '@/core/lib/pothos-builder';
 
-export const UserProfileEntity = builder.prismaObject('UserProfile', {
-  name: 'UserProfile',
+builder.prismaObject('ProfileModel', {
   fields: (t) => ({
     id: t.exposeID('id'),
     firstName: t.exposeString('firstName'),

@@ -7,7 +7,7 @@ enum UserStatus {
   @@map("user_status")
 }
 
-model User {
+model UserModel {
   id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   status     UserStatus @default(REGISTERED)
   roles      String[]   @default(["USER"])
@@ -19,7 +19,7 @@ model User {
   updatedAt  DateTime   @updatedAt @map("updated_at") @db.Timestamptz()
 
   // Relations
-  profile UserProfile?
+  profile ProfileModel?
 
   @@index([email])
   @@index([userName])
@@ -28,7 +28,7 @@ model User {
   @@map("users")
 }
 
-model UserProfile {
+model ProfileModel {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstName String   @map("first_name")
   lastName  String   @map("last_name")
@@ -38,10 +38,10 @@ model UserProfile {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
 
   // Relations
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique @map("user_id") @db.Uuid
+  user   UserModel @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String    @unique @map("user_id") @db.Uuid
 
   @@index([country])
   @@index([createdAt])
-  @@map("user_profiles")
+  @@map("profiles")
 }

@@ -1,7 +1,6 @@
 import { builder, UserStatusEnum } from '@/core/lib/pothos-builder';
 
-export const UserEntity = builder.prismaObject('User', {
-  name: 'User',
+builder.prismaObject('UserModel', {
   fields: (t) => ({
     id: t.exposeID('id'),
     status: t.field({

@@ -6,13 +6,13 @@ import { CreateUserInput, UserUpdateInput, UserWhereUniqueInput } from '../input
 
 builder.mutationFields((t) => ({
   createUser: t.prismaField({
-    type: 'User',
+    type: 'UserModel',
     args: {
       data: t.arg({ type: CreateUserInput, required: true }),
     },
     resolve: async (query, parent, args) => {
       const { data } = args;
-      return await prisma.user.create({
+      return await prisma.userModel.create({
         ...query,
         data: {
           ...data,
@@ -21,16 +21,16 @@ builder.mutationFields((t) => ({
     },
   }),
   updateUser: t.prismaField({
-    type: 'User',
+    type: 'UserModel',
     args: {
       where: t.arg({ type: UserWhereUniqueInput, required: true }),
       data: t.arg({ type: UserUpdateInput, required: true }),
     },
     resolve: async (query, parent, args) => {
       const { data, where } = args;
-      return await prisma.user.update({
+      return await prisma.userModel.update({
         ...query,
-        where: { ...where } as Prisma.UserWhereUniqueInput,
+        where: { ...where } as Prisma.UserModelWhereUniqueInput,
         data: { ...data },
       });
     },
