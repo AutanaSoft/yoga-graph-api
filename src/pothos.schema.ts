@@ -2,8 +2,6 @@ import { builder } from '@/core/lib/pothos-builder';
 
 // Import all modules to populate the Pothos builder registry
 import '@/modules/users/resolvers';
-import '@/modules/system/system.resolver';
-import '@/modules/health/health.resolver';
 
 /**
  * The final, compiled executable GraphQL schema instance to be passed to the GraphQL Yoga execution engine.

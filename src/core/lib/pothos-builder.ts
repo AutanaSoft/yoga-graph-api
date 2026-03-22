@@ -79,4 +79,3 @@ builder.scalarType('DateTime', {
 // Tipos raíz vacíos: se extienden en los módulos/resolvers del proyecto.
 builder.queryType({});
 builder.mutationType({});
-builder.subscriptionType({});
