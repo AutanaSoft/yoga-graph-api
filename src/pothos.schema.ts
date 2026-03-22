@@ -9,4 +9,4 @@ import '@/modules/health/health.resolver';
  * The final, compiled executable GraphQL schema instance to be passed to the GraphQL Yoga execution engine.
  * Built using Pothos Code-First approach.
  */
-export const schema = builder.toSchema();
+export const pothosSchema = builder.toSchema();

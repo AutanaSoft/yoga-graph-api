@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
 import { createYoga } from 'graphql-yoga';
-import { schema } from '@/schema';
+import { pothosSchema } from '@/pothos.schema';
 import { createContext } from '@/core/plugins/graphql/context';
 import { corsConfig } from '@/config/cors.config';
 
@@ -13,7 +13,7 @@ import { corsConfig } from '@/config/cors.config';
  */
 export const graphqlPlugin = fp((server) => {
   const yoga = createYoga({
-    schema: schema,
+    schema: pothosSchema,
     graphqlEndpoint: '/graphql',
     context: createContext,
   });
