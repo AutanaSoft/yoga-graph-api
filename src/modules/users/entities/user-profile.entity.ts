@@ -1,6 +1,7 @@
 import { builder } from '@/core/lib/pothos-builder';
 
 builder.prismaObject('ProfileModel', {
+  name: 'Profile',
   fields: (t) => ({
     id: t.exposeID('id'),
     firstName: t.exposeString('firstName'),

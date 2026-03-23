@@ -3,6 +3,7 @@
     "datamodel",
     "Datamodel",
     "datasource",
+    "dmmf",
     "openssl",
     "postgresql",
     "pothos",

@@ -1,28 +1,28 @@
 import z from 'zod';
 
-export const ModeFilterSchema = z.enum(['default', 'insensitive']);
+export const modeFilterSchema = z.enum(['default', 'insensitive']);
 
-export const UuidFilterSchema = z.object({
+export const uuidFilterSchema = z.object({
   equals: z.uuid('Invalid ID format').optional(),
   in: z.array(z.uuid('Invalid ID format')).optional(),
   notIn: z.array(z.uuid('Invalid ID format')).optional(),
 });
 
-export const UuidFilterUniqueSchema = z.uuid('Invalid ID format');
+export const uuidFilterUniqueSchema = z.uuid('Invalid ID format');
 
-export const StringFilterSchema = z.object({
+export const stringFilterSchema = z.object({
   equals: z.string().optional(),
   in: z.array(z.string()).optional(),
   notIn: z.array(z.string()).optional(),
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
-  mode: ModeFilterSchema.optional(),
+  mode: modeFilterSchema.optional(),
 });
 
-export const StringFilterUniqueSchema = z.string().nonempty();
+export const stringFilterUniqueSchema = z.string().nonempty();
 
-export const EmailFilterSchema = z
+export const emailFilterSchema = z
   .object({
     equals: z.email().optional(),
     in: z.array(z.email()).optional(),
@@ -43,9 +43,9 @@ export const EmailFilterSchema = z
     return data;
   });
 
-export const EmailFilterUniqueSchema = z.email().transform((data) => data.trim().toLowerCase());
+export const emailFilterUniqueSchema = z.email().transform((data) => data.trim().toLowerCase());
 
-export const DateTimeFilterSchema = z.object({
+export const dateTimeFilterSchema = z.object({
   equals: z.iso.datetime().optional(),
   in: z.array(z.iso.datetime()).optional(),
   notIn: z.array(z.iso.datetime()).optional(),
@@ -55,4 +55,4 @@ export const DateTimeFilterSchema = z.object({
   gte: z.iso.datetime().optional(),
 });
 
-export const DateTimeFilterUniqueSchema = z.iso.datetime();
+export const dateTimeFilterUniqueSchema = z.iso.datetime();

@@ -1,80 +1,54 @@
-import { builder, StringFilterInput, UuidFilterInput } from '@/core/lib/pothos-builder';
-import { EmailFilterSchema, StringFilterSchema, UuidFilterSchema } from '@/core/schemas';
+import { builder } from '@/core/lib/pothos-builder';
+import { emailFilterSchema, stringFilterSchema, uuidFilterSchema } from '@/core/schemas';
+import { UserStatus } from '@/database/prisma/generated/browser';
 import z from 'zod';
-import { CreateUserSchema, UpdateUserSchema } from '../schemas';
 
-const USER_LOOKUP_REQUIRED_MESSAGE =
-  'At least one lookup field is required: id, email, or userName.';
+export const UserStatusEnum = builder.enumType(UserStatus, {
+  name: 'UserStatus',
+});
 
-type UserLookupFields = {
-  id?: unknown;
-  email?: unknown;
-  userName?: unknown;
-};
+const uuidFilterInput = builder.inputType('UuidFilterInput', {
+  fields: (t) => ({
+    equals: t.string({ required: false }),
+    in: t.stringList({ required: false }),
+    notIn: t.stringList({ required: false }),
+  }),
+});
 
-// Reusable predicate to enforce at least one lookup field in search inputs.
-const hasUserLookupField = ({ id, email, userName }: UserLookupFields): boolean =>
-  Boolean(id || email || userName);
+const emailFilterInput = builder.inputType('EmailFilterInput', {
+  fields: (t) => ({
+    equals: t.string({ required: false }),
+    in: t.stringList({ required: false }),
+    notIn: t.stringList({ required: false }),
+    contains: t.string({ required: false }),
+    startsWith: t.string({ required: false }),
+    endsWith: t.string({ required: false }),
+  }),
+});
 
-const UserWhereValidationSchema = z
-  .object({
-    id: UuidFilterSchema.optional(),
-    email: EmailFilterSchema.optional(),
-    userName: StringFilterSchema.optional(),
-  })
-  .refine(hasUserLookupField, {
-    message: USER_LOOKUP_REQUIRED_MESSAGE,
-  });
+const stringFilterInput = builder.inputType('StringFilterInput', {
+  fields: (t) => ({
+    equals: t.string({ required: false }),
+    in: t.stringList({ required: false }),
+    notIn: t.stringList({ required: false }),
+    contains: t.string({ required: false }),
+    startsWith: t.string({ required: false }),
+    endsWith: t.string({ required: false }),
+  }),
+});
 
-const UserWhereUniqueValidationSchema = z
-  .object({
-    id: z.uuid().optional(),
-    email: z.email().optional(),
-    userName: z.string().optional(),
-  })
-  .refine(hasUserLookupField, {
-    message: USER_LOOKUP_REQUIRED_MESSAGE,
-  });
+export const getUserWhereInputSchema = z.object({
+  id: uuidFilterSchema.optional(),
+  email: emailFilterSchema.optional(),
+  userName: stringFilterSchema.optional(),
+});
 
-export const CreateUserInput = builder
-  .prismaCreate('UserModel', {
-    name: 'CreateUserInput',
-    fields: () => ({
-      roles: 'String',
-      email: 'String',
-      userName: 'String',
-      password: 'String',
+export const getUserWhereInput = builder
+  .inputType('GetUserWhereInput', {
+    fields: (t) => ({
+      id: t.field({ type: uuidFilterInput, required: false }),
+      email: t.field({ type: emailFilterInput, required: false }),
+      userName: t.field({ type: stringFilterInput, required: false }),
     }),
   })
-  .validate(CreateUserSchema);
-
-export const UserUpdateInput = builder
-  .prismaUpdate('UserModel', {
-    name: 'UserUpdateInput',
-    fields: () => ({
-      email: 'String',
-      userName: 'String',
-      password: 'String',
-    }),
-  })
-  .validate(UpdateUserSchema);
-
-export const UserWhereInput = builder
-  .prismaWhere('UserModel', {
-    fields: {
-      id: UuidFilterInput,
-      email: StringFilterInput,
-      userName: StringFilterInput,
-    },
-  })
-  .validate(UserWhereValidationSchema);
-
-export const UserWhereUniqueInput = builder
-  .prismaWhereUnique('UserModel', {
-    fields: () => ({
-      id: 'String',
-      email: 'String',
-      userName: 'String',
-    }),
-  })
-  .validate(UserWhereUniqueValidationSchema);
+  .validate(getUserWhereInputSchema);
