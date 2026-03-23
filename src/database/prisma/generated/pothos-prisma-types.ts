@@ -10,8 +10,8 @@ export default interface PrismaTypes {
     OrderBy: Prisma.UserModelOrderByWithRelationInput;
     WhereUnique: Prisma.UserModelWhereUniqueInput;
     Where: Prisma.UserModelWhereInput;
-    Create: Prisma.UserModelCreateInput;
-    Update: Prisma.UserModelUpdateInput;
+    Create: {};
+    Update: {};
     RelationName: 'profile';
     ListRelations: never;
     Relations: {
@@ -30,8 +30,8 @@ export default interface PrismaTypes {
     OrderBy: Prisma.ProfileModelOrderByWithRelationInput;
     WhereUnique: Prisma.ProfileModelWhereUniqueInput;
     Where: Prisma.ProfileModelWhereInput;
-    Create: Prisma.ProfileModelCreateInput;
-    Update: Prisma.ProfileModelUpdateInput;
+    Create: {};
+    Update: {};
     RelationName: 'user';
     ListRelations: never;
     Relations: {

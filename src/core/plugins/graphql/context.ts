@@ -1,5 +1,4 @@
-import { PrismaClient } from '@/database/prisma/generated/client';
-import { prisma } from '@/database/prisma.service';
+import { UserModel } from '@/database/prisma/generated/client';
 import { YogaInitialContext } from 'graphql-yoga';
 
 /**
@@ -8,7 +7,8 @@ import { YogaInitialContext } from 'graphql-yoga';
  */
 export interface GraphQLContext extends YogaInitialContext {
   /** The initialized Prisma Database Client */
-  prisma: PrismaClient;
+  // prisma: PrismaClient;
+  user: UserModel | null;
 }
 
 /**
@@ -20,6 +20,6 @@ export interface GraphQLContext extends YogaInitialContext {
 export function createContext(initialContext: YogaInitialContext): GraphQLContext {
   return {
     ...initialContext,
-    prisma,
+    user: null, // Placeholder for authenticated user data, to be populated by auth middleware in the future
   };
 }

@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["rhel"]
+  "cSpell.words": [
+    "datamodel",
+    "Datamodel",
+    "datasource",
+    "openssl",
+    "postgresql",
+    "pothos",
+    "rhel"
+  ]
 }
