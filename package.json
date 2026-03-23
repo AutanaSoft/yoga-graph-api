@@ -1,7 +1,7 @@
 {
-  "name": "yoga-graphql-test",
-  "version": "1.0.0",
-  "description": "",
+  "name": "yoga-graph-api",
+  "version": "0.1.0",
+  "description": "A GraphQL API built with GraphQL Yoga, Fastify, Pothos, and Prisma.",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch --include \"src/**/*.ts\" src/index.ts",
@@ -11,9 +11,24 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "prepare": "husky"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "graphql",
+    "graphql-yoga",
+    "fastify",
+    "pothos",
+    "prisma",
+    "api"
+  ],
+  "author": "AutanaSoft",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AutanaSoft/yoga-graph-api.git"
+  },
+  "homepage": "https://github.com/AutanaSoft/yoga-graph-api#readme",
+  "bugs": {
+    "url": "https://github.com/AutanaSoft/yoga-graph-api/issues"
+  },
+  "license": "MIT",
   "packageManager": "pnpm@10.32.1",
   "dependencies": {
     "@fastify/cors": "^11.2.0",
