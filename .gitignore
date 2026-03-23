@@ -3,8 +3,10 @@ dist/
 build/
 
 # Editors
-.vscode/
+# Ignore all files inside .vscode but keep settings.json
+.vscode/*
 !.vscode/settings.json
+!.vscode/
 
 # Logs
 logs
