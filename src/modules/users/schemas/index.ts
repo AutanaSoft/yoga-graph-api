@@ -1,2 +1,4 @@
-export * from './user.schemas';
-export * from './user-profile.schemas';
+export * from './user-db.schemas';
+export * from './user-dto.schemas';
+export * from './user-input.schemas';
+export * from './profile.schemas';

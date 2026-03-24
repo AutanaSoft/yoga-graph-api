@@ -1,80 +1,111 @@
-import { builder, StringFilterInput, UuidFilterInput } from '@/core/lib/pothos-builder';
-import { EmailFilterSchema, StringFilterSchema, UuidFilterSchema } from '@/core/schemas';
-import z from 'zod';
-import { CreateUserSchema, UpdateUserSchema } from '../schemas';
+import {
+  createEnumFilterInput,
+  dateTimeFilterInput,
+  paginationInput,
+  sortOrderEnum,
+  stringFilterInput,
+  uuidFilterInput,
+} from '@/core/shared';
+import { builder } from '@/core/platform/graphql';
+import { UserRoleEnum, UserStatusEnum } from '../enum';
+import {
+  createUserDataInputSchema,
+  updateUserDataInputSchema,
+  userOrderByInputSchema,
+  userPaginationInputSchema,
+  userWhereInputSchema,
+  userWhereUniqueInputSchema,
+} from '../schemas';
 
-const USER_LOOKUP_REQUIRED_MESSAGE =
-  'At least one lookup field is required: id, email, or userName.';
-
-type UserLookupFields = {
-  id?: unknown;
-  email?: unknown;
-  userName?: unknown;
-};
-
-// Reusable predicate to enforce at least one lookup field in search inputs.
-const hasUserLookupField = ({ id, email, userName }: UserLookupFields): boolean =>
-  Boolean(id || email || userName);
-
-const UserWhereValidationSchema = z
-  .object({
-    id: UuidFilterSchema.optional(),
-    email: EmailFilterSchema.optional(),
-    userName: StringFilterSchema.optional(),
-  })
-  .refine(hasUserLookupField, {
-    message: USER_LOOKUP_REQUIRED_MESSAGE,
-  });
-
-const UserWhereUniqueValidationSchema = z
-  .object({
-    id: z.uuid().optional(),
-    email: z.email().optional(),
-    userName: z.string().optional(),
-  })
-  .refine(hasUserLookupField, {
-    message: USER_LOOKUP_REQUIRED_MESSAGE,
-  });
-
-export const CreateUserInput = builder
-  .prismaCreate('UserModel', {
-    name: 'CreateUserInput',
-    fields: () => ({
-      roles: 'String',
-      email: 'String',
-      userName: 'String',
-      password: 'String',
+/**
+ * GraphQL input: GetUserWhereUniqueInput
+ *
+ * This input exposes a minimal set of searchable user identifiers:
+ * - `id`       : user UUID
+ * - `email`    : user email address
+ * - `userName` : username string
+ *
+ * Runtime validation is performed with `UserWhereUniqueInputSchema` to
+ * ensure caller intent (for example, the schema may require exactly one
+ * of the fields to be present). Use this input when resolving queries
+ * that expect a unique or narrowly-scoped user lookup.
+ */
+export const getUserWhereUniqueInput = builder
+  .inputType('GetUserWhereUniqueInput', {
+    fields: (t) => ({
+      id: t.string({ required: false }),
+      email: t.string({ required: false }),
+      userName: t.string({ required: false }),
     }),
   })
-  .validate(CreateUserSchema);
+  .validate(userWhereUniqueInputSchema);
 
-export const UserUpdateInput = builder
-  .prismaUpdate('UserModel', {
-    name: 'UserUpdateInput',
-    fields: () => ({
-      email: 'String',
-      userName: 'String',
-      password: 'String',
+export const userStatusFilterInput = createEnumFilterInput(
+  'UserStatusFilterInput',
+  UserStatusEnum,
+).validate(userWhereInputSchema.shape.status.unwrap());
+
+export const userRolesListFilterInput = builder
+  .inputType('UserRolesListFilterInput', {
+    fields: (t) => ({
+      has: t.field({ type: UserRoleEnum, required: false }),
+      hasEvery: t.field({ type: [UserRoleEnum], required: false }),
+      hasSome: t.field({ type: [UserRoleEnum], required: false }),
+      isEmpty: t.boolean({ required: false }),
     }),
   })
-  .validate(UpdateUserSchema);
+  .validate(userWhereInputSchema.shape.roles.unwrap());
 
-export const UserWhereInput = builder
-  .prismaWhere('UserModel', {
-    fields: {
-      id: UuidFilterInput,
-      email: StringFilterInput,
-      userName: StringFilterInput,
-    },
-  })
-  .validate(UserWhereValidationSchema);
-
-export const UserWhereUniqueInput = builder
-  .prismaWhereUnique('UserModel', {
-    fields: () => ({
-      id: 'String',
-      email: 'String',
-      userName: 'String',
+export const getUsersWhereInput = builder
+  .inputType('GetUsersWhereInput', {
+    fields: (t) => ({
+      id: t.field({ type: uuidFilterInput, required: false }),
+      email: t.field({ type: stringFilterInput, required: false }),
+      userName: t.field({ type: stringFilterInput, required: false }),
+      status: t.field({ type: userStatusFilterInput, required: false }),
+      roles: t.field({ type: userRolesListFilterInput, required: false }),
+      verifiedAt: t.field({ type: dateTimeFilterInput, required: false }),
+      createdAt: t.field({ type: dateTimeFilterInput, required: false }),
+      updatedAt: t.field({ type: dateTimeFilterInput, required: false }),
     }),
   })
-  .validate(UserWhereUniqueValidationSchema);
+  .validate(userWhereInputSchema);
+
+export const userOrderByInput = builder
+  .inputType('UserOrderByInput', {
+    fields: (t) => ({
+      id: t.field({ type: sortOrderEnum, required: false }),
+      email: t.field({ type: sortOrderEnum, required: false }),
+      userName: t.field({ type: sortOrderEnum, required: false }),
+      status: t.field({ type: sortOrderEnum, required: false }),
+      verifiedAt: t.field({ type: sortOrderEnum, required: false }),
+      createdAt: t.field({ type: sortOrderEnum, required: false }),
+      updatedAt: t.field({ type: sortOrderEnum, required: false }),
+    }),
+  })
+  .validate(userOrderByInputSchema);
+
+export const userPaginationInput = paginationInput.validate(userPaginationInputSchema);
+
+export const createUserDataInput = builder
+  .inputType('CreateUserDataInput', {
+    fields: (t) => ({
+      email: t.string({ required: true }),
+      userName: t.string({ required: true }),
+      password: t.string({ required: true }),
+      roles: t.field({ type: [UserRoleEnum], required: false }),
+    }),
+  })
+  .validate(createUserDataInputSchema);
+
+export const updateUserDataInput = builder
+  .inputType('UpdateUserDataInput', {
+    fields: (t) => ({
+      email: t.string({ required: false }),
+      userName: t.string({ required: false }),
+      status: t.field({ type: UserStatusEnum, required: false }),
+      roles: t.field({ type: [UserRoleEnum], required: false }),
+      verifiedAt: t.string({ required: false }),
+    }),
+  })
+  .validate(updateUserDataInputSchema);

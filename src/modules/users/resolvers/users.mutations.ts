@@ -1,38 +1,63 @@
-import { prisma } from '@/database/prisma.service';
-import { Prisma } from '@/database/prisma/generated/client';
-import { builder } from '@/core/lib/pothos-builder';
-import '../entities/user.entity';
-import { CreateUserInput, UserUpdateInput, UserWhereUniqueInput } from '../inputs';
+import { builder } from '@/core/platform/graphql';
+import type { Prisma } from '@/database/prisma/generated/client';
+import { userEntity } from '../entities/user.entity';
+import {
+  createUserDataInput,
+  getUserWhereUniqueInput,
+  getUsersWhereInput,
+  updateUserDataInput,
+} from '../inputs';
+import { usersService } from '../services';
 
 builder.mutationFields((t) => ({
   createUser: t.prismaField({
-    type: 'UserModel',
+    type: userEntity,
     args: {
-      data: t.arg({ type: CreateUserInput, required: true }),
+      data: t.arg({ type: createUserDataInput, required: true }),
     },
-    resolve: async (query, parent, args) => {
-      const { data } = args;
-      return await prisma.userModel.create({
+    resolve: (query, _root, args) =>
+      usersService.createUser({
         ...query,
-        data: {
-          ...data,
-        },
-      });
+        data: args.data,
+      }),
+  }),
+
+  updateUser: t.prismaField({
+    type: userEntity,
+    args: {
+      where: t.arg({ type: getUserWhereUniqueInput, required: true }),
+      data: t.arg({ type: updateUserDataInput, required: true }),
+    },
+    resolve: (query, _root, args) =>
+      usersService.updateUser({
+        ...query,
+        where: args.where as Prisma.UserModelWhereUniqueInput,
+        data: args.data,
+      }),
+  }),
+
+  updateUsers: t.field({
+    type: 'Int',
+    args: {
+      where: t.arg({ type: getUsersWhereInput, required: true }),
+      data: t.arg({ type: updateUserDataInput, required: true }),
+    },
+    resolve: async (_root, args) => {
+      const result = await usersService.updateUsers(args);
+
+      return result.count;
     },
   }),
-  updateUser: t.prismaField({
-    type: 'UserModel',
+
+  deleteUser: t.prismaField({
+    type: userEntity,
     args: {
-      where: t.arg({ type: UserWhereUniqueInput, required: true }),
-      data: t.arg({ type: UserUpdateInput, required: true }),
+      where: t.arg({ type: getUserWhereUniqueInput, required: true }),
     },
-    resolve: async (query, parent, args) => {
-      const { data, where } = args;
-      return await prisma.userModel.update({
+    resolve: (query, _root, args) =>
+      usersService.deleteUser({
         ...query,
-        where: { ...where } as Prisma.UserModelWhereUniqueInput,
-        data: { ...data },
-      });
-    },
+        where: args.where as Prisma.UserModelWhereUniqueInput,
+      }),
   }),
 }));
