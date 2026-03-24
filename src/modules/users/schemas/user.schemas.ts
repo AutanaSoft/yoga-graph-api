@@ -51,16 +51,13 @@ export const CreateUserSchema = UserEntitySchema.omit({
 
 export type CreateUserType = z.infer<typeof CreateUserSchema>;
 
-export const UpdateUserSchema = z.object({
-  id: z.uuid('Invalid user ID'),
-  data: CreateUserSchema.partial()
-    .omit({
-      password: true,
-    })
-    .extend({
-      status: UserStatusEnum.optional(),
-    }),
-});
+export const UpdateUserSchema = CreateUserSchema.partial()
+  .omit({
+    password: true,
+  })
+  .extend({
+    status: UserStatusEnum.optional(),
+  });
 
 export type UpdateUserType = z.infer<typeof UpdateUserSchema>;
 
@@ -84,7 +81,6 @@ export const UserWhereInputSchema = z.object({
   roles: z.array(UserRolesEnum).optional(),
   verifiedAt: z.iso.datetime('Verification date must be a valid datetime').nullable().optional(),
   createdAt: z.iso.datetime('Creation date must be a valid datetime').optional(),
-  updatedAt: z.iso.datetime('Update date must be a valid datetime').optional(),
 });
 
 export type UserWhereInputType = z.infer<typeof UserWhereInputSchema>;

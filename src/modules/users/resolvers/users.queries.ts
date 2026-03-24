@@ -6,14 +6,14 @@ import { getUserWhereInput } from '../inputs';
 
 builder.queryFields((t) => ({
   getUser: t.prismaField({
-    type: [userEntity],
+    type: userEntity,
     nullable: true,
     args: {
       where: t.arg({ type: getUserWhereInput, required: true }),
     },
     resolve: (query, root, args) => {
       const { where } = args;
-      return prisma.userModel.findMany({
+      return prisma.userModel.findFirst({
         ...query,
         where,
       });
