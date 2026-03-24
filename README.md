@@ -1,66 +1,102 @@
-# YogaGraph API
+# Yoga Graph API
 
-YogaGraph API is a GraphQL backend built with GraphQL Yoga, Fastify, Pothos, and Prisma. It is designed as a modular API for building typed schemas, queries, mutations, and database-backed business logic.
+Yoga Graph API is a GraphQL backend built with Fastify, GraphQL Yoga, Pothos, Prisma, and Zod.
 
-## Features
+## Stack
 
-- GraphQL server powered by GraphQL Yoga
-- Fastify-based HTTP server
-- Schema-first developer experience with Pothos
-- Prisma integration for database access and generated types
-- Environment validation with Zod
-- Security-focused Fastify plugins for CORS, Helmet, rate limiting, and CSRF protection
+- Fastify for the HTTP server
+- GraphQL Yoga for GraphQL execution
+- Pothos for code-first schema building
+- Prisma for database access and generated types
+- Zod for runtime validation
 
 ## Requirements
 
-- Node.js 20 or newer
-- pnpm 10 or newer
+- Node.js 20+
+- pnpm 10+
 - PostgreSQL
 
-## Getting Started
+## Quick Start
 
 ```bash
 pnpm install
 ```
 
-Create a `.env` file in the project root with the required environment variables:
+Create a `.env` file in the project root:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/yogagraph"
 APP_ENV="development"
 APP_PORT=4000
 APP_LOG_LEVEL="info"
+CORS_ORIGIN="http://localhost:3000"
+UPLOAD_DIR=".uploads"
+UPLOAD_ROUTE="/uploads/"
 ```
 
-Run the development server:
+Start the development server:
 
 ```bash
 pnpm run dev
 ```
 
-The GraphQL endpoint will be available at:
+GraphQL is available at:
 
 ```text
 http://localhost:4000/graphql
 ```
 
-## Available Scripts
+## Scripts
 
 - `pnpm run dev` - start the development server with hot reload
+- `pnpm run build` - compile TypeScript to `dist/`
+- `pnpm run start` - run the compiled app
 - `pnpm run lint` - run ESLint with auto-fix
 - `pnpm run format` - format TypeScript sources with Prettier
-- `pnpm exec tsc --noEmit` - type-check the project
-- `pnpm exec prisma generate` - generate the Prisma client
-- `pnpm exec prisma migrate dev` - run local database migrations
+- `pnpm exec tsc --noEmit` - run type-check only
+- `pnpm exec prisma generate` - generate Prisma client and Pothos types
+- `pnpm exec prisma migrate dev` - create and apply local migrations
 
 ## Project Structure
 
 - `src/index.ts` - application entry point
-- `src/server.ts` - Fastify server bootstrap and plugin registration
-- `src/modules/` - feature modules with resolvers, services, entities, and inputs
+- `src/server.ts` - Fastify bootstrap and plugin registration
+- `src/core/platform/` - runtime/platform concerns (GraphQL, Fastify, builder)
+- `src/core/shared/` - reusable contracts (inputs, schemas, enums, factories, types)
+- `src/modules/` - domain modules organized by table/feature
 - `src/database/prisma/` - Prisma schema, migrations, and generated client
-- `src/core/` - shared utilities, plugins, and GraphQL helpers
+
+## Architecture Notes
+
+- Domain modules are organized by table/feature and split into:
+  - `entities/`
+  - `inputs/`
+  - `schemas/`
+  - `mappers/`
+  - `repositories/`
+  - `services/`
+  - `resolvers/`
+- Public list queries use `page` + `take` pagination.
+- Prisma-like contracts are preferred for `where`, `orderBy`, and `data`.
+- Shared filters and factories live in `src/core/shared/`.
+- The `profile` relation is exposed from the `User` entity; there is no dedicated profile query.
+
+## Environment Variables
+
+- `DATABASE_URL` - PostgreSQL connection string
+- `APP_ENV` - `development` or `production`
+- `APP_PORT` - server port
+- `APP_LOG_LEVEL` - logger level
+- `CORS_ORIGIN` - allowed CORS origin
+- `UPLOAD_DIR` - upload directory (`.uploads` by default)
+- `UPLOAD_ROUTE` - public upload route (`/uploads/` by default)
+
+## Notes
+
+- GraphQL endpoint: `/graphql`
+- `.uploads/` is ignored by git
+- No dedicated test script is defined yet
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+MIT
