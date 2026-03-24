@@ -29,6 +29,18 @@ jobs:
         with:
           languages: javascript-typescript
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
 
