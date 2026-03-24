@@ -1,1 +1,14 @@
 * @AutanaSoft
+
+# Core architecture and reusable contracts
+/src/core/ @AutanaSoft
+
+# Domain modules
+/src/modules/ @AutanaSoft
+/src/modules/users/ @AutanaSoft
+
+# Database and Prisma
+/src/database/prisma/ @AutanaSoft
+
+# GitHub automation and repository operations
+/.github/ @AutanaSoft
