@@ -35,6 +35,7 @@ export const userEntity = builder.prismaObject('UserModel', {
     // Contact / identification fields
     email: t.exposeString('email'),
     userName: t.exposeString('userName'),
+    profile: t.relation('profile', { nullable: true }),
 
     // Timestamps
     verifiedAt: t.expose('verifiedAt', { type: 'DateTime', nullable: true }),

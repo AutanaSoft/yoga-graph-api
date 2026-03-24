@@ -1,6 +1,6 @@
 import { builder } from '@/core/platform/graphql';
 
-builder.prismaObject('ProfileModel', {
+export const userProfileEntity = builder.prismaObject('ProfileModel', {
   name: 'Profile',
   fields: (t) => ({
     id: t.exposeID('id'),

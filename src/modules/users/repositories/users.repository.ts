@@ -29,6 +29,14 @@ export class UsersRepository {
   deleteMany(args: Prisma.UserModelDeleteManyArgs) {
     return prisma.userModel.deleteMany(args);
   }
+
+  createProfile(args: Prisma.ProfileModelCreateArgs) {
+    return prisma.profileModel.create(args);
+  }
+
+  updateProfile(args: Prisma.ProfileModelUpdateArgs) {
+    return prisma.profileModel.update(args);
+  }
 }
 
 export const usersRepository = new UsersRepository();

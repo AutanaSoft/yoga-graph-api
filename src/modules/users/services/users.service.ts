@@ -36,6 +36,14 @@ export class UsersService {
   deleteUsers(args: Prisma.UserModelDeleteManyArgs) {
     return usersRepository.deleteMany(args);
   }
+
+  createUserProfile(args: Prisma.ProfileModelCreateArgs) {
+    return usersRepository.createProfile(args);
+  }
+
+  updateUserProfile(args: Prisma.ProfileModelUpdateArgs) {
+    return usersRepository.updateProfile(args);
+  }
 }
 
 export const usersService = new UsersService();
