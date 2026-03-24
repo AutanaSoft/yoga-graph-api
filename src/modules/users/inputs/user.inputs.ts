@@ -1,9 +1,18 @@
-import { builder } from '@/core/lib/pothos-builder';
-import { SortOrderEnum, UserStatusEnum } from '../enum';
+import {
+  createEnumFilterInput,
+  dateTimeFilterInput,
+  paginationInput,
+  sortOrderEnum,
+  stringFilterInput,
+  uuidFilterInput,
+} from '@/core/shared';
+import { builder } from '@/core/platform/graphql';
+import { UserStatusEnum } from '../enum';
 import {
   createUserDataInputSchema,
   updateUserDataInputSchema,
   userOrderByInputSchema,
+  userPaginationInputSchema,
   userWhereInputSchema,
   userWhereUniqueInputSchema,
 } from '../schemas';
@@ -31,62 +40,22 @@ export const getUserWhereUniqueInput = builder
   })
   .validate(userWhereUniqueInputSchema);
 
-export const userStringFilterInput = builder
-  .inputType('UserStringFilterInput', {
-    fields: (t) => ({
-      equals: t.string({ required: false }),
-      contains: t.string({ required: false }),
-      startsWith: t.string({ required: false }),
-      endsWith: t.string({ required: false }),
-      in: t.stringList({ required: false }),
-      notIn: t.stringList({ required: false }),
-    }),
-  })
-  .validate(userWhereInputSchema.shape.email.unwrap());
-
-export const userUuidFilterInput = builder
-  .inputType('UserUuidFilterInput', {
-    fields: (t) => ({
-      equals: t.string({ required: false }),
-      in: t.stringList({ required: false }),
-      notIn: t.stringList({ required: false }),
-    }),
-  })
-  .validate(userWhereInputSchema.shape.id.unwrap());
-
-export const userDateTimeFilterInput = builder
-  .inputType('UserDateTimeFilterInput', {
-    fields: (t) => ({
-      equals: t.string({ required: false }),
-      lt: t.string({ required: false }),
-      lte: t.string({ required: false }),
-      gt: t.string({ required: false }),
-      gte: t.string({ required: false }),
-    }),
-  })
-  .validate(userWhereInputSchema.shape.createdAt.unwrap());
-
-export const userStatusFilterInput = builder
-  .inputType('UserStatusFilterInput', {
-    fields: (t) => ({
-      equals: t.field({ type: UserStatusEnum, required: false }),
-      in: t.field({ type: [UserStatusEnum], required: false }),
-      notIn: t.field({ type: [UserStatusEnum], required: false }),
-    }),
-  })
-  .validate(userWhereInputSchema.shape.status.unwrap());
+export const userStatusFilterInput = createEnumFilterInput(
+  'UserStatusFilterInput',
+  UserStatusEnum,
+).validate(userWhereInputSchema.shape.status.unwrap());
 
 export const getUsersWhereInput = builder
   .inputType('GetUsersWhereInput', {
     fields: (t) => ({
-      id: t.field({ type: userUuidFilterInput, required: false }),
-      email: t.field({ type: userStringFilterInput, required: false }),
-      userName: t.field({ type: userStringFilterInput, required: false }),
+      id: t.field({ type: uuidFilterInput, required: false }),
+      email: t.field({ type: stringFilterInput, required: false }),
+      userName: t.field({ type: stringFilterInput, required: false }),
       status: t.field({ type: userStatusFilterInput, required: false }),
       rolesHas: t.string({ required: false }),
-      verifiedAt: t.field({ type: userDateTimeFilterInput, required: false }),
-      createdAt: t.field({ type: userDateTimeFilterInput, required: false }),
-      updatedAt: t.field({ type: userDateTimeFilterInput, required: false }),
+      verifiedAt: t.field({ type: dateTimeFilterInput, required: false }),
+      createdAt: t.field({ type: dateTimeFilterInput, required: false }),
+      updatedAt: t.field({ type: dateTimeFilterInput, required: false }),
     }),
   })
   .validate(userWhereInputSchema);
@@ -94,16 +63,18 @@ export const getUsersWhereInput = builder
 export const userOrderByInput = builder
   .inputType('UserOrderByInput', {
     fields: (t) => ({
-      id: t.field({ type: SortOrderEnum, required: false }),
-      email: t.field({ type: SortOrderEnum, required: false }),
-      userName: t.field({ type: SortOrderEnum, required: false }),
-      status: t.field({ type: SortOrderEnum, required: false }),
-      verifiedAt: t.field({ type: SortOrderEnum, required: false }),
-      createdAt: t.field({ type: SortOrderEnum, required: false }),
-      updatedAt: t.field({ type: SortOrderEnum, required: false }),
+      id: t.field({ type: sortOrderEnum, required: false }),
+      email: t.field({ type: sortOrderEnum, required: false }),
+      userName: t.field({ type: sortOrderEnum, required: false }),
+      status: t.field({ type: sortOrderEnum, required: false }),
+      verifiedAt: t.field({ type: sortOrderEnum, required: false }),
+      createdAt: t.field({ type: sortOrderEnum, required: false }),
+      updatedAt: t.field({ type: sortOrderEnum, required: false }),
     }),
   })
   .validate(userOrderByInputSchema);
+
+export const userPaginationInput = paginationInput.validate(userPaginationInputSchema);
 
 export const createUserDataInput = builder
   .inputType('CreateUserDataInput', {

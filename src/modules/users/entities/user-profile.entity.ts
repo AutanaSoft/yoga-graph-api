@@ -1,4 +1,4 @@
-import { builder } from '@/core/lib/pothos-builder';
+import { builder } from '@/core/platform/graphql';
 
 builder.prismaObject('ProfileModel', {
   name: 'Profile',

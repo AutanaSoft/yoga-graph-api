@@ -1,8 +1,6 @@
 import { fastifyLoggerOptions } from '@/config/logger.config';
-import { correlationPlugin } from '@/core/plugins/fastify/correlation.plugin';
-import { securityPlugins } from '@/core/plugins/fastify/security.plugin';
-import { uploadPlugin } from '@/core/plugins/fastify/upload.plugin';
-import { graphqlPlugin } from '@/core/plugins/graphql/graphql.plugin';
+import { correlationPlugin, securityPlugins, uploadPlugin } from '@/core/platform/fastify';
+import { graphqlPlugin } from '@/core/platform/graphql';
 import fastify, { FastifyInstance } from 'fastify';
 import crypto from 'node:crypto';
 

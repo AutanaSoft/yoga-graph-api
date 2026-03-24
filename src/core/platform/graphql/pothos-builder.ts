@@ -1,12 +1,12 @@
 import { prisma } from '@/database/prisma.service';
-import type PrismaTypes from '@/database/prisma/generated/pothos-prisma-types';
 import { getDatamodel } from '@/database/prisma/generated/pothos-prisma-types';
+import type PrismaTypes from '@/database/prisma/generated/pothos-prisma-types';
 import SchemaBuilder from '@pothos/core';
 import ComplexityPlugin from '@pothos/plugin-complexity';
 import PrismaPlugin from '@pothos/plugin-prisma';
 import ScopeAuthPlugin from '@pothos/plugin-scope-auth';
 import ValidationPlugin from '@pothos/plugin-validation';
-import { GraphQLContext } from '../plugins/graphql/context';
+import { GraphQLContext } from './context';
 
 export const builder = new SchemaBuilder<{
   PrismaTypes: PrismaTypes;
@@ -28,10 +28,9 @@ export const builder = new SchemaBuilder<{
   };
 }>({
   plugins: [ScopeAuthPlugin, PrismaPlugin, ValidationPlugin, ComplexityPlugin],
-  // @ts-expect-error - Pothos typings a veces requieren un reinicio completo del server TS para registrar las extensiones de plugins
+  // @ts-expect-error - Pothos typings may require full TS server restart
   authScopes: (context: GraphQLContext) => ({
     public: true,
-    // TODO: Estas reglas se activarán una vez que el context reciba el token JWT real
     loggedIn: !!context.user,
     hasRole: (role: string) => context.user?.roles.includes(role) ?? false,
   }),
@@ -49,10 +48,9 @@ export const builder = new SchemaBuilder<{
 });
 
 builder.scalarType('DateTime', {
-  serialize: (n) => (n instanceof Date ? n.toISOString() : new Date().toISOString()),
-  parseValue: (n) => (typeof n === 'string' ? new Date(n) : new Date()),
+  serialize: (value) => (value instanceof Date ? value.toISOString() : new Date().toISOString()),
+  parseValue: (value) => (typeof value === 'string' ? new Date(value) : new Date()),
 });
 
-// Tipos raíz vacíos: se extienden en los módulos/resolvers del proyecto.
 builder.queryType({});
 builder.mutationType({});

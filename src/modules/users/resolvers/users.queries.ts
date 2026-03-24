@@ -1,32 +1,14 @@
-import { builder } from '@/core/lib/pothos-builder';
-import type { Prisma } from '@/database/prisma/generated/client';
+import { toPrismaPagination } from '@/core/shared';
+import { builder } from '@/core/platform/graphql';
 import { userEntity } from '../entities/user.entity';
-import { getUserWhereUniqueInput, getUsersWhereInput, userOrderByInput } from '../inputs';
+import {
+  getUserWhereUniqueInput,
+  getUsersWhereInput,
+  userOrderByInput,
+  userPaginationInput,
+} from '../inputs';
+import { mapUserWhereInput } from '../mappers';
 import { usersService } from '../services';
-
-const mapWhereInput = (
-  where?: {
-    id?: Prisma.StringFilter;
-    email?: Prisma.StringFilter;
-    userName?: Prisma.StringFilter;
-    status?: Prisma.EnumUserStatusFilter;
-    rolesHas?: string;
-    verifiedAt?: Prisma.DateTimeNullableFilter;
-    createdAt?: Prisma.DateTimeFilter;
-    updatedAt?: Prisma.DateTimeFilter;
-  } | null,
-): Prisma.UserModelWhereInput | undefined => {
-  if (!where) {
-    return undefined;
-  }
-
-  const { rolesHas, ...restWhere } = where;
-
-  return {
-    ...restWhere,
-    roles: rolesHas ? { has: rolesHas } : undefined,
-  };
-};
 
 /**
  * Query: getUser
@@ -58,16 +40,18 @@ builder.queryFields((t) => ({
     args: {
       where: t.arg({ type: getUsersWhereInput, required: false }),
       orderBy: t.arg({ type: [userOrderByInput], required: false }),
-      skip: t.arg.int({ required: false }),
-      take: t.arg.int({ required: false }),
+      pagination: t.arg({ type: userPaginationInput, required: false }),
     },
-    resolve: (query, _root, args) =>
-      usersService.getUsers({
+    resolve: (query, _root, args) => {
+      const { skip, take } = toPrismaPagination(args.pagination);
+
+      return usersService.getUsers({
         ...query,
-        where: mapWhereInput(args.where ?? undefined),
+        where: mapUserWhereInput(args.where ?? undefined),
         orderBy: args.orderBy ?? undefined,
-        skip: args.skip ?? undefined,
-        take: args.take ?? undefined,
-      }),
+        skip,
+        take,
+      });
+    },
   }),
 }));

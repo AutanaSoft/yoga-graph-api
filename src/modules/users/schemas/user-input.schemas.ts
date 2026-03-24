@@ -1,7 +1,12 @@
 import { z } from 'zod';
+import {
+  createOrderBySchema,
+  dateTimeFilterSchema,
+  paginationSchema,
+  stringFilterSchema,
+  uuidFilterSchema,
+} from '@/core/shared';
 import { userStatusSchema } from './user-db.schemas';
-
-export const userSortOrderSchema = z.enum(['asc', 'desc'], 'Sort order must be asc or desc');
 
 export const userWhereUniqueInputSchema = z
   .object({
@@ -28,28 +33,11 @@ export const userWhereUniqueInputSchema = z
     },
   );
 
-export const userStringFilterSchema = z.object({
-  equals: z.string().optional(),
-  contains: z.string().optional(),
-  startsWith: z.string().optional(),
-  endsWith: z.string().optional(),
-  in: z.array(z.string()).optional(),
-  notIn: z.array(z.string()).optional(),
-});
+export const userStringFilterSchema = stringFilterSchema;
 
-export const userUuidFilterSchema = z.object({
-  equals: z.uuid('Invalid user ID').optional(),
-  in: z.array(z.uuid('Invalid user ID')).optional(),
-  notIn: z.array(z.uuid('Invalid user ID')).optional(),
-});
+export const userUuidFilterSchema = uuidFilterSchema;
 
-export const userDateTimeFilterSchema = z.object({
-  equals: z.iso.datetime('Invalid datetime').optional(),
-  lt: z.iso.datetime('Invalid datetime').optional(),
-  lte: z.iso.datetime('Invalid datetime').optional(),
-  gt: z.iso.datetime('Invalid datetime').optional(),
-  gte: z.iso.datetime('Invalid datetime').optional(),
-});
+export const userDateTimeFilterSchema = dateTimeFilterSchema;
 
 export const userStatusFilterSchema = z.object({
   equals: userStatusSchema.optional(),
@@ -68,24 +56,17 @@ export const userWhereInputSchema = z.object({
   updatedAt: userDateTimeFilterSchema.optional(),
 });
 
-export const userOrderByInputSchema = z
-  .object({
-    id: userSortOrderSchema.optional(),
-    email: userSortOrderSchema.optional(),
-    userName: userSortOrderSchema.optional(),
-    status: userSortOrderSchema.optional(),
-    verifiedAt: userSortOrderSchema.optional(),
-    createdAt: userSortOrderSchema.optional(),
-    updatedAt: userSortOrderSchema.optional(),
-  })
-  .refine((args) => Object.values(args).some(Boolean), {
-    message: 'At least one orderBy field is required',
-  });
+export const userOrderByInputSchema = createOrderBySchema([
+  'id',
+  'email',
+  'userName',
+  'status',
+  'verifiedAt',
+  'createdAt',
+  'updatedAt',
+]);
 
-export const userPaginationInputSchema = z.object({
-  skip: z.number().int().min(0).optional(),
-  take: z.number().int().min(1).max(100).optional(),
-});
+export const userPaginationInputSchema = paginationSchema.partial();
 
 export type UserWhereUniqueInputType = z.infer<typeof userWhereUniqueInputSchema>;
 export type UserWhereInputType = z.infer<typeof userWhereInputSchema>;

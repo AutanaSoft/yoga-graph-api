@@ -1,4 +1,4 @@
-import { builder } from '@/core/lib/pothos-builder';
+import { builder } from '@/core/platform/graphql';
 import type { Prisma } from '@/database/prisma/generated/client';
 import { userEntity } from '../entities/user.entity';
 import {
@@ -7,31 +7,8 @@ import {
   getUsersWhereInput,
   updateUserDataInput,
 } from '../inputs';
+import { mapUserWhereInput } from '../mappers';
 import { usersService } from '../services';
-
-const mapWhereInput = (
-  where?: {
-    id?: Prisma.StringFilter;
-    email?: Prisma.StringFilter;
-    userName?: Prisma.StringFilter;
-    status?: Prisma.EnumUserStatusFilter;
-    rolesHas?: string;
-    verifiedAt?: Prisma.DateTimeNullableFilter;
-    createdAt?: Prisma.DateTimeFilter;
-    updatedAt?: Prisma.DateTimeFilter;
-  } | null,
-): Prisma.UserModelWhereInput | undefined => {
-  if (!where) {
-    return undefined;
-  }
-
-  const { rolesHas, ...restWhere } = where;
-
-  return {
-    ...restWhere,
-    roles: rolesHas ? { has: rolesHas } : undefined,
-  };
-};
 
 builder.mutationFields((t) => ({
   createUser: t.prismaField({
@@ -68,7 +45,7 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, args) => {
       const result = await usersService.updateUsers({
-        where: mapWhereInput(args.where),
+        where: mapUserWhereInput(args.where),
         data: args.data,
       });
 
@@ -95,7 +72,7 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, args) => {
       const result = await usersService.deleteUsers({
-        where: mapWhereInput(args.where),
+        where: mapUserWhereInput(args.where),
       });
 
       return result.count;
