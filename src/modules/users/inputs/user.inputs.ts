@@ -7,7 +7,7 @@ import {
   uuidFilterInput,
 } from '@/core/shared';
 import { builder } from '@/core/platform/graphql';
-import { UserStatusEnum } from '../enum';
+import { UserRoleEnum, UserStatusEnum } from '../enum';
 import {
   createUserDataInputSchema,
   updateUserDataInputSchema,
@@ -45,6 +45,17 @@ export const userStatusFilterInput = createEnumFilterInput(
   UserStatusEnum,
 ).validate(userWhereInputSchema.shape.status.unwrap());
 
+export const userRolesListFilterInput = builder
+  .inputType('UserRolesListFilterInput', {
+    fields: (t) => ({
+      has: t.field({ type: UserRoleEnum, required: false }),
+      hasEvery: t.field({ type: [UserRoleEnum], required: false }),
+      hasSome: t.field({ type: [UserRoleEnum], required: false }),
+      isEmpty: t.boolean({ required: false }),
+    }),
+  })
+  .validate(userWhereInputSchema.shape.roles.unwrap());
+
 export const getUsersWhereInput = builder
   .inputType('GetUsersWhereInput', {
     fields: (t) => ({
@@ -52,7 +63,7 @@ export const getUsersWhereInput = builder
       email: t.field({ type: stringFilterInput, required: false }),
       userName: t.field({ type: stringFilterInput, required: false }),
       status: t.field({ type: userStatusFilterInput, required: false }),
-      rolesHas: t.string({ required: false }),
+      roles: t.field({ type: userRolesListFilterInput, required: false }),
       verifiedAt: t.field({ type: dateTimeFilterInput, required: false }),
       createdAt: t.field({ type: dateTimeFilterInput, required: false }),
       updatedAt: t.field({ type: dateTimeFilterInput, required: false }),
@@ -82,7 +93,7 @@ export const createUserDataInput = builder
       email: t.string({ required: true }),
       userName: t.string({ required: true }),
       password: t.string({ required: true }),
-      roles: t.stringList({ required: false }),
+      roles: t.field({ type: [UserRoleEnum], required: false }),
     }),
   })
   .validate(createUserDataInputSchema);
@@ -93,7 +104,7 @@ export const updateUserDataInput = builder
       email: t.string({ required: false }),
       userName: t.string({ required: false }),
       status: t.field({ type: UserStatusEnum, required: false }),
-      roles: t.stringList({ required: false }),
+      roles: t.field({ type: [UserRoleEnum], required: false }),
       verifiedAt: t.string({ required: false }),
     }),
   })

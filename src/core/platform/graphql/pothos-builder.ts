@@ -1,6 +1,7 @@
 import { prisma } from '@/database/prisma.service';
 import { getDatamodel } from '@/database/prisma/generated/pothos-prisma-types';
 import type PrismaTypes from '@/database/prisma/generated/pothos-prisma-types';
+import type { UserRole } from '@/database/prisma/generated/client';
 import SchemaBuilder from '@pothos/core';
 import ComplexityPlugin from '@pothos/plugin-complexity';
 import PrismaPlugin from '@pothos/plugin-prisma';
@@ -14,7 +15,7 @@ export const builder = new SchemaBuilder<{
   AuthScopes: {
     public: boolean;
     loggedIn: boolean;
-    hasRole: string;
+    hasRole: UserRole;
   };
   Scalars: {
     DateTime: {
@@ -32,7 +33,7 @@ export const builder = new SchemaBuilder<{
   authScopes: (context: GraphQLContext) => ({
     public: true,
     loggedIn: !!context.user,
-    hasRole: (role: string) => context.user?.roles.includes(role) ?? false,
+    hasRole: (role: UserRole) => context.user?.roles.includes(role) ?? false,
   }),
   complexity: {
     defaultComplexity: 1,

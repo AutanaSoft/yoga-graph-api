@@ -7,7 +7,6 @@ import {
   getUsersWhereInput,
   updateUserDataInput,
 } from '../inputs';
-import { mapUserWhereInput } from '../mappers';
 import { usersService } from '../services';
 
 builder.mutationFields((t) => ({
@@ -45,7 +44,7 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, args) => {
       const result = await usersService.updateUsers({
-        where: mapUserWhereInput(args.where),
+        where: args.where,
         data: args.data,
       });
 
@@ -72,7 +71,7 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, args) => {
       const result = await usersService.deleteUsers({
-        where: mapUserWhereInput(args.where),
+        where: args.where,
       });
 
       return result.count;

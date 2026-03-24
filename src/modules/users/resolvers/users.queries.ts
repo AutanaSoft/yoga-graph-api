@@ -7,7 +7,6 @@ import {
   userOrderByInput,
   userPaginationInput,
 } from '../inputs';
-import { mapUserWhereInput } from '../mappers';
 import { usersService } from '../services';
 
 /**
@@ -47,7 +46,7 @@ builder.queryFields((t) => ({
 
       return usersService.getUsers({
         ...query,
-        where: mapUserWhereInput(args.where ?? undefined),
+        where: args.where ?? undefined,
         orderBy: args.orderBy ?? undefined,
         skip,
         take,

@@ -1,5 +1,5 @@
 import { builder } from '@/core/platform/graphql';
-import { UserStatus } from '@/database/prisma/generated/client';
+import { UserRole, UserStatus } from '@/database/prisma/generated/client';
 
 /**
  * GraphQL enum exposing Prisma's `UserStatus` values.
@@ -13,4 +13,8 @@ import { UserStatus } from '@/database/prisma/generated/client';
  */
 export const UserStatusEnum = builder.enumType(UserStatus, {
   name: 'UserStatus',
+});
+
+export const UserRoleEnum = builder.enumType(UserRole, {
+  name: 'UserRole',
 });

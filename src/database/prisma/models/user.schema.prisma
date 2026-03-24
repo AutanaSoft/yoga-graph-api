@@ -7,10 +7,17 @@ enum UserStatus {
   @@map("user_status")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+
+  @@map("user_role")
+}
+
 model UserModel {
   id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   status     UserStatus @default(REGISTERED)
-  roles      String[]   @default(["USER"])
+  roles      UserRole[] @default([USER])
   email      String     @unique
   userName   String     @unique @map("user_name")
   password   String

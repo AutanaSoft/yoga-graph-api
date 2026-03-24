@@ -6,7 +6,7 @@ import {
   stringFilterSchema,
   uuidFilterSchema,
 } from '@/core/shared';
-import { userStatusSchema } from './user-db.schemas';
+import { userRolesEnumSchema, userStatusSchema } from './user-db.schemas';
 
 export const userWhereUniqueInputSchema = z
   .object({
@@ -45,12 +45,19 @@ export const userStatusFilterSchema = z.object({
   notIn: z.array(userStatusSchema).optional(),
 });
 
+export const userRolesListFilterSchema = z.object({
+  has: userRolesEnumSchema.optional(),
+  hasEvery: z.array(userRolesEnumSchema).optional(),
+  hasSome: z.array(userRolesEnumSchema).optional(),
+  isEmpty: z.boolean().optional(),
+});
+
 export const userWhereInputSchema = z.object({
   id: userUuidFilterSchema.optional(),
   email: userStringFilterSchema.optional(),
   userName: userStringFilterSchema.optional(),
   status: userStatusFilterSchema.optional(),
-  rolesHas: z.string().optional(),
+  roles: userRolesListFilterSchema.optional(),
   verifiedAt: userDateTimeFilterSchema.optional(),
   createdAt: userDateTimeFilterSchema.optional(),
   updatedAt: userDateTimeFilterSchema.optional(),

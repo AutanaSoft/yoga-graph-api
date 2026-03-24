@@ -1,5 +1,5 @@
 import { builder } from '@/core/platform/graphql';
-import { UserStatusEnum } from '../enum';
+import { UserRoleEnum, UserStatusEnum } from '../enum';
 
 /**
  * GraphQL object type for `User` backed by the Prisma `UserModel`.
@@ -26,8 +26,11 @@ export const userEntity = builder.prismaObject('UserModel', {
       resolve: (user) => user.status,
     }),
 
-    // Roles stored as a string array in the DB
-    roles: t.expose('roles', { type: ['String'] }),
+    // Roles stored as an enum array in the DB
+    roles: t.field({
+      type: [UserRoleEnum],
+      resolve: (user) => user.roles,
+    }),
 
     // Contact / identification fields
     email: t.exposeString('email'),
