@@ -7,14 +7,14 @@ export const UserStatusEnum = z.enum(
 
 export type UserStatusType = z.infer<typeof UserStatusEnum>;
 
-export const UserRolesEnum = z.enum(['USER', 'ADMIN'], 'Invalid user role');
+export const UserRolesEnumSchema = z.enum(['USER', 'ADMIN'], 'Invalid user role');
 
-export type UserRolesType = z.infer<typeof UserRolesEnum>;
+export type UserRolesType = z.infer<typeof UserRolesEnumSchema>;
 
 export const UserEntitySchema = z.object({
   id: z.uuid('Invalid user ID'),
   status: UserStatusEnum,
-  roles: z.array(UserRolesEnum).default(['USER']),
+  roles: z.array(UserRolesEnumSchema).default(['USER']),
   email: z.email('Invalid email format'),
   userName: z.string('Username must be a string'),
   password: z.string('Password must be a string'),
@@ -61,15 +61,38 @@ export const UpdateUserSchema = CreateUserSchema.partial()
 
 export type UpdateUserType = z.infer<typeof UpdateUserSchema>;
 
+/**
+ * UserWhereUniqueInputSchema
+ *
+ * Validates input used to find a single user by a unique identifier.
+ * - Accepts `id`, `email`, or `userName` (each is optional individually).
+ * - Applies lightweight transformations: trims strings and lowercases email.
+ * - Enforces that exactly one of `id`, `email`, or `userName` is provided.
+ */
 export const UserWhereUniqueInputSchema = z
   .object({
-    id: z.uuid('Invalid user ID').optional(),
-    email: z.email('Invalid email format').optional(),
-    userName: z.string('Username must be a string').optional(),
+    id: z
+      .uuid('Invalid user ID')
+      .transform((val) => val?.trim())
+      .optional(),
+    email: z
+      .email('Invalid email format')
+      .transform((val) => val?.trim().toLowerCase())
+      .optional(),
+    userName: z
+      .string('Username must be a string')
+      .transform((val) => val?.trim())
+      .optional(),
   })
-  .refine((args) => !!args.id || !!args.email || !!args.userName, {
-    message: 'You must provide an ID, email, or username to search for the user',
-  });
+  .refine(
+    (args) => {
+      const providedCount = [args.id, args.email, args.userName].filter(Boolean).length;
+      return providedCount === 1;
+    },
+    {
+      message: 'You must provide exactly one of: id, email, or userName',
+    },
+  );
 
 export type UserWhereUniqueInputType = z.infer<typeof UserWhereUniqueInputSchema>;
 
@@ -78,7 +101,7 @@ export const UserWhereInputSchema = z.object({
   email: z.email('Invalid email format').optional(),
   userName: z.string('Username must be a string').optional(),
   status: UserStatusEnum.optional(),
-  roles: z.array(UserRolesEnum).optional(),
+  roles: z.array(UserRolesEnumSchema).optional(),
   verifiedAt: z.iso.datetime('Verification date must be a valid datetime').nullable().optional(),
   createdAt: z.iso.datetime('Creation date must be a valid datetime').optional(),
 });
