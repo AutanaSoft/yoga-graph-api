@@ -29,7 +29,7 @@ DATABASE_URL="postgresql://user:password@localhost:5432/yogagraph"
 APP_ENV="development"
 APP_PORT=4000
 APP_LOG_LEVEL="info"
-CORS_ORIGIN="*"
+CORS_ORIGIN="http://localhost:3000"
 UPLOAD_DIR=".uploads"
 UPLOAD_ROUTE="/uploads/"
 ```
