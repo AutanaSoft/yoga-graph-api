@@ -1,72 +1,101 @@
-AGENTS (Agent Guidelines for this repository)
+# AGENTS (Repository Guidelines)
 
-Purpose
+## Agent Role
 
-- Provide build, lint, and test commands agents should use;
-- Define concise code style and conventions so automated agents produce consistent changes.
+- Act as a senior backend engineering agent for this stack: Node.js, TypeScript, GraphQL Yoga, Pothos, Prisma, and Zod.
+- Deliver safe, minimal, production-oriented changes aligned with repository conventions.
+- Prioritize clear architecture boundaries, reusable shared contracts, and maintainable module code.
 
-1. Agent language rules
+## Purpose
 
-- User-facing communication: always respond in Spanish when communicating with the user (messages, explanations, walkthroughs, and interactive prompts).
-- Code-generation and technical artifacts: all generated source code, in-code documentation (JSDoc/TSDoc), code comments, commit messages related to code changes, and developer-facing technical documentation MUST be written in English. This keeps the codebase and API surface consistent for international developers.
-- Use `pnpm` to manage project dependencies.
-- Do not run the `build` command unless the user explicitly requests it.
+Practical rules for code-generation agents working in this repository.
 
-2. Important scripts / commands
+## 1) Communication and language
 
-- Install dependencies (preferred package manager): `pnpm install` (this repository uses pnpm@10+)
-- Start dev server (hot-reload): `pnpm run dev` (runs `tsx watch --include "src/**/*.ts" src/index.ts`)
-- Build production artifacts: `pnpm run build` (runs `tsc` -> outputs `dist/`)
-- Start built app: `pnpm run start` (runs `node dist/index.js`)
-- Lint and auto-fix: `pnpm run lint` (runs `eslint --fix .`)
-- Format with Prettier: `pnpm run format` (runs `prettier --write "src/**/*.ts"`)
-- Type‑check only: `pnpm exec tsc --noEmit` (run via `pnpm exec` to use local typescript)
-- Tests: there is no dedicated `test` script in `package.json`; do not invent test commands.
+- Keep responses short and direct by default.
+- User-facing communication must be in Spanish.
+- Source code, comments, JSDoc/TSDoc, commit messages, and technical docs in the repo must be in English.
+- Use `pnpm` for all dependency and script workflows.
+- Do not run `pnpm run build` unless the user explicitly requests it.
 
-3. Prisma / DB
+## 2) Commands you can rely on
 
-- Generate prisma client: `pnpm exec prisma generate`
-- Run migrations (local/dev): `pnpm exec prisma migrate dev`
+- Install deps: `pnpm install`
+- Dev server: `pnpm run dev`
+- Start built app: `pnpm run start`
+- Lint (auto-fix): `pnpm run lint`
+- Format: `pnpm run format`
+- Type-check: `pnpm exec tsc --noEmit`
+- Prisma generate: `pnpm exec prisma generate`
+- Prisma migrations (dev): `pnpm exec prisma migrate dev`
+- Tests: there is currently no `test` script; do not invent test commands.
 
-4. High-level code style & conventions
+## 3) Current architecture (important)
 
-- Language: TypeScript (target ESNext / Node environment). Always keep types strict where reasonable.
-- Filenames: use kebab-case for filenames (example: `create-user.dto.ts`, `users.service.ts`).
-- Symbols: use English for variable/function/type names.
-- Exports: prefer named exports. Use `export class` / `export function` / `export const` instead of default exports.
+- Core is split into:
+  - `src/core/platform/*` for runtime/platform concerns (Fastify, GraphQL, builder).
+  - `src/core/shared/*` for reusable contracts (inputs, schemas, enums, factories, shared types).
+- Domain modules live in `src/modules/*` and should follow the same layered pattern.
 
-5. Types, interfaces and DTOs
+### Canonical imports
 
-- Prefer `type` for union/utility types and `interface` for object-shaped types used as API/DTO contracts.
-- This codebase currently uses GraphQL `inputs/` and `entities/` folders (for example `user-create.input.ts`, `user.entity.ts`) instead of `dto/`; follow existing local module patterns.
-- Keep runtime validation separate from types: use Zod for runtime validation where input must be validated (`src/config/env-validator.ts` shows a pattern).
-- Avoid `any`. If unavoidable, add a short TODO comment referencing reason and a follow-up task.
+- GraphQL builder and platform GraphQL exports:
+  - `@/core/platform/graphql`
+- Fastify platform plugins:
+  - `@/core/platform/fastify`
+- Shared reusable contracts:
+  - `@/core/shared`
+- Avoid legacy paths under `src/core/lib`, `src/core/plugins`, `src/core/inputs`, `src/core/schemas`.
 
-6. Naming conventions
+## 4) Module implementation pattern
 
-- Classes and types: PascalCase (e.g., `UsersService`, `CreateUserDto`).
-- Functions and variables: camelCase (e.g., `getUsers`, `emailContains`).
-- Repository methods: verbs that indicate DB actions: `findById`, `findAll`, `create`, `update`, `delete`.
-- GraphQL schema builder and resolvers: keep GraphQL `type`/`field` names in GraphQL-casing where appropriate but TS identifiers remain camelCase/PascalCase.
+For each module (for example `users`), follow this split:
 
-7. Error handling
+- `entities/`: Pothos Prisma-backed GraphQL entities.
+- `inputs/`: GraphQL input types using `.validate(...)`.
+- `schemas/`: Zod runtime schemas.
+- `mappers/`: input-to-domain/Prisma mapping helpers.
+- `repositories/`: Prisma data access only.
+- `services/`: business logic and safeguards.
+- `resolvers/`: orchestration only (`*.queries.ts`, `*.mutations.ts`).
 
-- Throw typed Errors for exceptional control flow; avoid returning `null`/`undefined` to indicate failure unless explicitly part of the domain contract.
-- Prefer creating small, descriptive Error subclasses or use `HttpError`-like helpers when integrating with the HTTP layer.
-- Validate inputs (DTOs / Zod) at the boundary (resolver/controller) and return structured GraphQL errors or HTTP responses with proper status codes.
-- When catching, always either rethrow a wrapped error (with contextual message) or handle it fully. Do not silently swallow errors.
+## 5) Query/filter conventions
 
-8. GraphQL / Pothos / Prisma patterns
+- Prefer Prisma-like contracts for list/single operations:
+  - `where`, `orderBy`, and `data` where appropriate.
+- Shared generic filters must come from `core/shared` when possible.
+- Reuse shared factories (for example orderBy schema factory) instead of duplicating schema logic.
+- Keep domain-specific filters/inputs in the module.
 
-- GraphQL types and resolvers live under `src/modules/*` with a resolver and service/repository split.
-- Keep business logic in services (`*.service.ts`), persistence in repositories (`*.repository.ts`), and orchestrate in resolvers.
-- Split resolver entrypoints by concern (`*.queries.ts`, `*.mutations.ts`) under `resolvers/` when extending modules.
-- Prefer the `@/` path alias for source imports instead of deep relative paths.
-- Define Prisma-backed GraphQL entities with `builder.prismaObject` in `entities/`.
-- Use Pothos plugins consistently for Prisma integration (the repo has @pothos/plugin-prisma). Keep generated Pothos files under `src/database/prisma/generated` and do not hand-edit generated files.
+## 6) Pagination convention
 
-9. Pull requests & commits
+- Public GraphQL pagination input is `page` + `take`.
+- Convert to Prisma pagination with shared helper (`toPrismaPagination`) before repository calls.
+- Keep sane limits for `take` (validate and clamp).
 
-- Never create a commit or push unless explicitly requested by the user.
-- Follow the `commit-messenger` skill to generate commit messages.
-- Do not skip Husky hooks unless the user expressly approves.
+## 7) Naming and style
+
+- Language: TypeScript (strict mode).
+- Filenames: kebab-case.
+- Symbols: English, camelCase/PascalCase.
+- Prefer named exports over default exports.
+- Avoid `any`; if unavoidable, add a brief TODO with reason.
+
+## 8) Validation and errors
+
+- Validate input at the boundary (GraphQL input + Zod).
+- Keep runtime validation logic in schemas, not inline in resolvers.
+- Throw explicit errors; do not silently swallow errors.
+- Return `null` only when it is part of the GraphQL/domain contract.
+
+## 9) Prisma and generated code
+
+- Never edit generated files under `src/database/prisma/generated/*`.
+- Regenerate via Prisma commands when schema changes.
+- Keep Prisma access in repositories; avoid direct Prisma calls in resolvers.
+
+## 10) Commits and pushes
+
+- Never commit or push unless explicitly requested by the user.
+- Do not skip hooks unless the user explicitly asks.
+- Follow repository commit conventions (use `commit-messenger` skill when asked to craft a commit message).

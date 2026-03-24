@@ -12,7 +12,7 @@ import { join } from 'path';
  * Zod schema expressing the required constraints for Upload configurations.
  */
 const envSchema = z.object({
-  UPLOAD_DIR: z.string().default('uploads'),
+  UPLOAD_DIR: z.string().default('.uploads'),
   UPLOAD_ROUTE: z.string().default('/uploads/'),
 });
 

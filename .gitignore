@@ -1,6 +1,7 @@
 # Folder
 dist/
 build/
+.uploads/
 
 # Editors
 # Ignore all files inside .vscode but keep settings.json
