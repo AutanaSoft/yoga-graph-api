@@ -1,5 +1,5 @@
-import { builder } from '@/core/lib';
-import { UserStatus } from '@/database/prisma/generated/client';
+import { builder } from '@/core/lib/pothos-builder';
+import { Prisma, UserStatus } from '@/database/prisma/generated/client';
 
 /**
  * GraphQL enum exposing Prisma's `UserStatus` values.
@@ -13,4 +13,8 @@ import { UserStatus } from '@/database/prisma/generated/client';
  */
 export const UserStatusEnum = builder.enumType(UserStatus, {
   name: 'UserStatus',
+});
+
+export const SortOrderEnum = builder.enumType(Prisma.SortOrder, {
+  name: 'SortOrder',
 });
