@@ -43,10 +43,7 @@ builder.mutationFields((t) => ({
       data: t.arg({ type: updateUserDataInput, required: true }),
     },
     resolve: async (_root, args) => {
-      const result = await usersService.updateUsers({
-        where: args.where,
-        data: args.data,
-      });
+      const result = await usersService.updateUsers(args);
 
       return result.count;
     },
@@ -62,19 +59,5 @@ builder.mutationFields((t) => ({
         ...query,
         where: args.where as Prisma.UserModelWhereUniqueInput,
       }),
-  }),
-
-  deleteUsers: t.field({
-    type: 'Int',
-    args: {
-      where: t.arg({ type: getUsersWhereInput, required: true }),
-    },
-    resolve: async (_root, args) => {
-      const result = await usersService.deleteUsers({
-        where: args.where,
-      });
-
-      return result.count;
-    },
   }),
 }));

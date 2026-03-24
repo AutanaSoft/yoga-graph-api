@@ -5,8 +5,8 @@ const DEFAULT_TAKE = 20;
 const MAX_TAKE = 100;
 
 export class UsersService {
-  getUser(args: Prisma.UserModelFindFirstArgs) {
-    return usersRepository.findFirst(args);
+  getUser(query: Prisma.UserModelFindFirstArgs) {
+    return usersRepository.findFirst(query);
   }
 
   getUsers(args: Prisma.UserModelFindManyArgs) {
@@ -14,6 +14,7 @@ export class UsersService {
     return usersRepository.findMany({
       ...args,
       take,
+      cursor: args.cursor ?? undefined,
     });
   }
 

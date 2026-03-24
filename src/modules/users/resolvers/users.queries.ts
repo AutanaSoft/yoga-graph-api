@@ -1,5 +1,5 @@
-import { toPrismaPagination } from '@/core/shared';
 import { builder } from '@/core/platform/graphql';
+import { toPrismaPagination } from '@/core/shared';
 import { userEntity } from '../entities/user.entity';
 import {
   getUserWhereUniqueInput,
@@ -30,7 +30,7 @@ builder.queryFields((t) => ({
     resolve: (query, _root, args) =>
       usersService.getUser({
         ...query,
-        where: args.where,
+        ...args,
       }),
   }),
 
