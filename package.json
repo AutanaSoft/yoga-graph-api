@@ -61,18 +61,18 @@
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.6.0",
     "@types/pg": "^8.20.0",
-    "eslint": "^10.1.0",
+    "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
-    "globals": "^17.4.0",
+    "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "prettier": "^3.8.1",
-    "prisma": "^7.5.0",
+    "prettier": "^3.8.2",
+    "prisma": "^7.7.0",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.57.2"
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.2"
   }
 }
